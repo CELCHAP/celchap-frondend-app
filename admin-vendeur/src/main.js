@@ -2,14 +2,17 @@ import { createApp } from 'vue'
 import './style.css'
 import App from './App.vue'
 import VueProgressBar from "@aacassandra/vue3-progressbar";
-// import VueRouter from 'vue-router'
+import PrimeVue from 'primevue/config';
+import 'primevue/resources/themes/saga-blue/theme.css '      //theme
+import 'primevue/resources/primevue.min.css      '           //core css
+import 'primeicons/primeicons.css'
 import router from "./router";
 
 const app = createApp(App)
 
 // option pour la bar de progression lors du chargement des pages
 const options = {
-  color: "#f97316",
+  color: "#fb6b00",
   failedColor: "#dc2626",
   thickness: "3px",
   transition: {
@@ -22,8 +25,8 @@ const options = {
   inverse: false,
 };
 
-// app.use(VueRouter)
 app.use(router);
 app.use(VueProgressBar, options);
+app.use(PrimeVue);
 
 app.mount('#app')
