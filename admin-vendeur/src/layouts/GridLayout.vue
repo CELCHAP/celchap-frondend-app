@@ -6,19 +6,23 @@
           <h1 class="text-3xl text-custom-orange text-cnter font-extrabold">Celchap.</h1>
         </div>
         <div class="px-4 mt-10">
-          <div class="hover:bg-custom-orange hover:text-white hover:shadow-sm hover:shadow-custom-orange/20 rounded-md px-4 h-11 flex items-center gap-x-2 mt-3 cursor-pointer">
-            <vue-feather type="home"></vue-feather>
-            <p class="text-lg font-bold">Dashboard</p>
-          </div>
-          <div class="hover:bg-custom-orange hover:text-white hover:shadow-sm hover:shadow-custom-orange/20 rounded-md px-4 h-11 flex items-center gap-x-2 mt-3 cursor-pointer">
-            <vue-feather type="package"></vue-feather>
-            <p class="text-lg font-bold">Mes articles</p>
-          </div>
-          <div class="hover:bg-custom-orange hover:text-white hover:shadow-sm hover:shadow-custom-orange/20 rounded-md px-4 h-11 flex items-center gap-x-2 mt-3 cursor-pointer">
-            <vue-feather type="shopping-bag"></vue-feather>
-            <p class="text-lg font-bold">Mes commandes</p>
-          </div>
-          <div class="hover:bg-custom-orange hover:text-white hover:shadow-sm hover:shadow-custom-orange/20 rounded-md px-4 h-11 flex items-center gap-x-2 mt-3 cursor-pointer">
+          <nuxt-link to="/dashboard">
+            <div
+              class="hover:bg-custom-orange hover:text-white hover:shadow-sm hover:shadow-custom-orange/20 rounded-md px-4 h-11 flex items-center gap-x-2 mt-3 cursor-pointer">
+              <vue-feather type="home"></vue-feather>
+              <p class="text-lg font-bold">Dashboard</p>
+            </div>
+          </nuxt-link>
+          <nuxt-link to="/articles">
+            <div
+              class="hover:bg-custom-orange hover:text-white hover:shadow-sm hover:shadow-custom-orange/20 rounded-md px-4 h-11 flex items-center gap-x-2 mt-3 cursor-pointer">
+              <vue-feather type="package"></vue-feather>
+              <p class="text-lg font-bold">Mes articles</p>
+            </div>
+          </nuxt-link>
+          <nuxt-link to="/"></nuxt-link>
+          <div
+            class="hover:bg-custom-orange hover:text-white hover:shadow-sm hover:shadow-custom-orange/20 rounded-md px-4 h-11 flex items-center gap-x-2 mt-3 cursor-pointer">
             <vue-feather type="settings"></vue-feather>
             <p class="text-lg font-bold">Paramètre</p>
           </div>
