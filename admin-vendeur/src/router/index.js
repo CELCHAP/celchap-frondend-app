@@ -110,30 +110,30 @@ const router = createRouter({
   linkActiveClass: "cellchap-active-link",
 });
 
-router.beforeEach((to, from, next) => {
-  // if route requires authentication - requiresAuth is true
-  if (to.matched.some((record) => record.meta.requiresAuth)) {
-    if (localStorage.getItem('chap-access') == null) {
-      next({ name: 'connexion' });
-    } else {
-      next();
-    }
-  }
-  // if route can be accessed without authentication - guest is true 
-  // but we redirect back to dashboard if already logged in 
-  else if (to.matched.some((record) => record.meta.guest)) {
-    if (localStorage.getItem('chap-access')) {
-      next({ name: 'mes-boutiques' });
-    } else {
-      next();
-    }
-  }
-  // if not guest or requiresAuth continue
-  // e.g. about us page 
-  else {
-    next();
-  }
-});
+// router.beforeEach((to, from, next) => {
+//   // if route requires authentication - requiresAuth is true
+//   if (to.matched.some((record) => record.meta.requiresAuth)) {
+//     if (localStorage.getItem('chap-access') == null) {
+//       next({ name: 'connexion' });
+//     } else {
+//       next();
+//     }
+//   }
+//   // if route can be accessed without authentication - guest is true 
+//   // but we redirect back to dashboard if already logged in 
+//   else if (to.matched.some((record) => record.meta.guest)) {
+//     if (localStorage.getItem('chap-access')) {
+//       next({ name: 'mes-boutiques' });
+//     } else {
+//       next();
+//     }
+//   }
+//   // if not guest or requiresAuth continue
+//   // e.g. about us page 
+//   else {
+//     next();
+//   }
+// });
 
 router.afterEach((to, from) => {
   // this.$Progress.finish();

@@ -2,6 +2,7 @@ import { createApp } from 'vue'
 import './style.css'
 import App from './App.vue'
 import VueProgressBar from "@aacassandra/vue3-progressbar";
+import VueFeather from 'vue-feather';
 import PrimeVue from 'primevue/config';
 import 'primevue/resources/themes/saga-blue/theme.css '      //theme
 import 'primevue/resources/primevue.min.css      '           //core css
@@ -28,5 +29,6 @@ const options = {
 app.use(router);
 app.use(VueProgressBar, options);
 app.use(PrimeVue);
+app.component(VueFeather.name, VueFeather);
 
 app.mount('#app')

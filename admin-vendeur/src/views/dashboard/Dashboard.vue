@@ -1,10 +1,12 @@
 <template>
-  <div>
+  <GridLayout>
     <h1>Dashboard</h1>
-  </div>
+  </GridLayout>
 </template>
 
 <script setup>
+import GridLayout from '../../layouts/GridLayout.vue';
+
 </script>
 
 <style scoped>
