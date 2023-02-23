@@ -35,14 +35,14 @@ const router = createRouter({
         guest: true,
       },
     },
-    // {
-    //   path: "/articles",
-    //   name: "articles",
-    //   component: () => import("../views/articles/Articles.vue"),
-    //   meta: {
-    //     requiresAuth: true,
-    //   },
-    // },
+    {
+      path: "/articles",
+      name: "articles",
+      component: () => import("../views/articles/Articles.vue"),
+      meta: {
+        requiresAuth: true,
+      },
+    },
     // {
     //   path: "/articles/detail/:id",
     //   name: "detail-article",
