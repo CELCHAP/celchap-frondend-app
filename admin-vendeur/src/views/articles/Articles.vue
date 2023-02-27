@@ -131,11 +131,10 @@
       <input type="checkbox" id="edit-article" class="modal-toggle" />
       <div class="modal">
         <div class="modal-box w-11/12 max-w-2xl">
-          <h3 class="font-extrabold text-2xl text-custom-orange text-">Ajouter un article</h3>
-          <div class="mt-10">
-            <AjoutArticle />
+          <h3 class="font-extrabold text-xl md:text-2xl text-custom-orange text-">Ajouter un article</h3>
+          <div class="modal-ajout-article mt-10">
+            <AjoutArticle :article_Detail="articleDetail" />
           </div>
-          
         </div>
       </div>
     </div>
@@ -170,11 +169,21 @@ const listeArticles = ref([
 const searchTerm = ref("")
 const categorieSelected = ref("")
 const articleToDelete = ref("")
+const articleDetail = ref({})
 const isLoading = ref(false)
 const isLoadingDelete = ref(false)
 
 const openModalEditArticle = () => {
   document.getElementById('edit-article').click()
+
+  articleDetail.value = {
+    title: 'Sac de voyage bassam',
+    prix: "24000",
+    prix_promo: "21000",
+    quantiteStock: "12"
+  }
+
+  console.log('dssds', articleDetail.value)
 }
 
 const alertDelete = (articleId) => {
@@ -224,5 +233,29 @@ const deleteCommande = () => {
 .ProseMirror {
   margin-top: .75rem;
   outline: none !important;
+}
+
+@media screen and (max-width: 540px) {
+  .modal-ajout-article .column {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+@media screen and (max-width: 540px) {
+  .modal-ajout-article .column-action {
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 0;
+  }
+
+  .modal-ajout-article .column-action button {
+    width: 100%;
+  }
+
+  .modal-ajout-article button.custom-btn {
+    margin-left: 0 !important;
+    margin-bottom: 15px;
+  }
 }
 </style>

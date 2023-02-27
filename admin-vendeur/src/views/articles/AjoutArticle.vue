@@ -1,18 +1,19 @@
 <template>
   <div>
 
-    <div class="flex items-center gap-x-4">
+    <div class="column flex items-center gap-x-4">
       <div class="form-control w-full">
         <label class="label">
-          <span class="label-text text-base text-gray-600 font-semibold">Nom</span>
+          <span class="label-text text-sm sm:text-base font-semibold">Nom</span>
         </label>
-        <input type="text" placeholder="Sac à main GUCCI" class="input input-bordered w-full font-medium rounded-md" />
+        <input type="text" placeholder="Sac à main GUCCI" class="input input-bordered w-full font-medium rounded-md"
+          v-model="articleDataField.title" />
       </div>
       <div class="form-control w-full">
         <label class="label">
-          <span class="label-text text-base text-gray-600 font-semibold">Catégorie</span>
+          <span class="label-text text-sm sm:text-base font-semibold">Catégorie</span>
         </label>
-        <select class="select select-bordered font-medium rounded-md">
+        <select class="select select-bordered font-medium rounded-md" v-model="articleDataField.category">
           <option value="" disabled selected>Choisir une catégorie</option>
           <option>Han Solo</option>
           <option>Greedo</option>
@@ -23,7 +24,7 @@
     <!-- Editeur de text -->
     <div class="mt-2">
       <label class="label">
-        <span class="text-md font-semibold">Description de l'article</span>
+        <span class="text-sm sm:text-base font-semibold">Description de l'article</span>
       </label>
       <div class="bg-white rounded-md border p-2">
         <div v-if="editor" class="flex flex-wrap gap-y-1 gap-x-2 border-b pb-3">
@@ -64,55 +65,94 @@
     </div>
     <!-- Fin editeur de texte -->
 
-    <div class="flex items-center gap-x-4 mt-2">
+    <div class="column flex items-center gap-x-4 mt-2">
       <div class="form-control w-full">
         <label class="label">
-          <span class="label-text text-base text-gray-600 font-semibold">Prix normal (FCFA)</span>
+          <span class="label-text text-sm sm:text-base font-semibold">Prix normal (FCFA)</span>
         </label>
-        <input type="text" placeholder="45000" class="input input-bordered w-full font-medium rounded-md" />
+        <input type="text" placeholder="45000" class="input input-bordered w-full font-medium rounded-md"
+          v-model="articleDataField.prix" />
       </div>
       <div class="form-control w-full">
         <label class="label">
-          <span class="label-text text-base text-gray-600 font-semibold">Prix en promo (FCFA)</span>
+          <span class="label-text text-sm sm:text-base font-semibold">Prix en promo (FCFA)</span>
         </label>
-        <input type="text" placeholder="34000" class="input input-bordered w-full font-medium rounded-md" />
+        <input type="text" placeholder="34000" class="input input-bordered w-full font-medium rounded-md"
+          v-model="articleDataField.prix_promo" />
       </div>
     </div>
 
     <div class="mt-2">
       <div class="form-control w-full">
         <label class="label">
-          <span class="label-text text-base text-gray-600 font-semibold">Quantité en stock</span>
+          <span class="label-text text-sm sm:text-base font-semibold">Quantité en stock</span>
         </label>
-        <input type="text" placeholder="6" class="input input-bordered w-full font-medium rounded-md" />
+        <input type="text" placeholder="6" class="input input-bordered w-full font-medium rounded-md"
+          v-model="articleDataField.quantiteStock" />
       </div>
     </div>
 
     <div class="mt-3">
-      <p class="text-base font-semibold mt-1">Photos de l'articles</p>
-      <div class="bg-white rounded-md h-20 w-full mt-2 border-2 border-dashed flex items-center justify-center">
-        <p class="cursor-pointer text-sm text-gray-400">Sélectionnez une ou plusieurs photos</p>
+      <p class="text-sm sm:text-base font-semibold mt-1">Photos de l'articles</p>
+      <div
+        class="bg-white rounded-md h-28 w-full mt-2 border-2 border-dashed flex items-center justify-start gap-x-3 p-2">
+
+        <div v-for="(item, index) in files" :key="index"
+          class="relative bg-gray-100 w-28 h-full rounded-md shadow-sm border flex flex-col items-center justify-center cursor-pointer">
+          <button
+            class="absolute -top-3 -right-3 w-5 h-5 rounded-full bg-red-600 text-white flex items-center justify-center"
+            @click="removeFile(index)">
+            <vue-feather type="x" size="14"></vue-feather>
+          </button>
+          <img :src="filePreview(item)" alt="" class="object-contain">
+        </div>
+
+        <div v-if="files.length < 6"
+          class="bg-gray-100 w-28 h-full rounded-md shadow-sm border flex flex-col items-center justify-center cursor-pointer"
+          @click="choosefile">
+          <vue-feather type="image"></vue-feather>
+          <p class="text-xs text-gray-600 font-semibold">Choisir un fichier</p>
+        </div>
+
+        <input type="file" id="file-input-btn" accept="image/jpg, image/jpeg, image/png" hidden @change="onFileChange" />
       </div>
     </div>
 
-    <div class="modal-action">
-      <label for="edit-article" class="btn">Annuler</label>
-      <label for="edit-article" class="btn">Enregistrer</label>
+    <div class="column-action modal-action pt-5">
+
+      <button :disabled="isLoadingDelete"
+        class="bg-gray-300 w-1/2 h-10 flex items-center justify-center rounded-md text-black font-bold"
+        @click="closeModal">Annuler</button>
+
+      <button :disabled="isLoadingDelete"
+        class="custom-btn bg-custom-orange w-1/2 h-10 flex items-center justify-center rounded-md font-bold text-white"
+        @click="saveArticle">
+        <ProgressSpinner v-if="isLoadingDelete" style="width:25px;height:25px" strokeWidth="5" fill="none"
+          animationDuration=".5s" aria-label="Custom ProgressSpinner" />
+        <span v-if="!isLoadingDelete">Enregistrer</span>
+      </button>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { watch, ref, toRefs } from 'vue';
 import { useEditor, EditorContent } from '@tiptap/vue-3'
+import ProgressSpinner from 'primevue/progressspinner';
 import StarterKit from '@tiptap/starter-kit'
 
+const props = defineProps({
+  article_Detail: Object,
+});
+
+const { article_Detail } = toRefs(props)
+
 const editor = useEditor({
-  content: '<p>Tapez une description ici</p> <br><br>',
+  content: '<p>Tapez une description ici</p><br>',
   // triggered on every change
   onUpdate: ({ editor }) => {
     const html = editor.getHTML()
-    articleData.value.description = html
+    articleDataField.value.description = html
   },
   extensions: [
     StarterKit,
@@ -125,15 +165,50 @@ const articleDataField = ref({
   description: '',
   prix: '',
   prix_promo: '',
-  date_fin_promo: '',
-  poids: '',
-  taille: '',
   stock: '',
-  disponibilite: 'oui'
+  images: []
 })
-const component  = ref({})
-const inputImages = ref([])
-const imageType = ref(['image/jpeg', 'image/png', 'image/gif'])
+const isLoadingDelete = ref(false)
+const files = ref([])
+
+watch(article_Detail, () => {
+  console.log('UPDATE VALUE', article_Detail.value)
+  articleDataField.value.title = article_Detail.value.title
+})
+
+const choosefile = () => {
+  document.getElementById('file-input-btn').click()
+}
+
+const onFileChange = (e) => {
+  if (e.target.files[0] && !files.value.includes(e.target.files[0])) {
+    files.value.push(e.target.files[0])
+  }
+}
+
+const removeFile = (index) => {
+  if (index > -1) {
+    files.value.splice(index, 1);
+  }
+}
+
+const filePreview = (file) => {
+  return URL.createObjectURL(file)
+}
+
+const closeModal = () => {
+  document.getElementById('edit-article').click()
+}
+
+const saveArticle = () => {
+  isLoadingDelete.value = true
+  console.log('articles', articleDataField.value)
+  
+  setTimeout(() => {
+    isLoadingDelete.value = false
+    console.log('FILES', files.value)
+  }, 3000);
+}
 </script>
 
 <style>
