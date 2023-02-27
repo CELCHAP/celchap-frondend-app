@@ -7,6 +7,10 @@ html, body {
   font-family: 'Inter Tight', sans-serif;
 }
 
+h1, h2, h3, h4, h5, h6, p, a, li, input, textarea, select, label, div {
+  font-family: 'Inter Tight', sans-serif !important;
+}
+
 .p-sidebar.p-component.p-ripple-disabled {
   font-family: 'Inter Tight', sans-serif !important;
 }
