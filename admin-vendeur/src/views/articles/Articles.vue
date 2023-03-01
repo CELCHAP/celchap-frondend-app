@@ -39,7 +39,7 @@
         </div>
         <div>
           <button class="bg-custom-orange w-32 sm:w-36 h-10 text-white text-xs sm:text-sm font-bold rounded-md shadow-sm"
-            @click="openModalEditArticle">Ajouter un article</button>
+            @click="() => openModalEditArticle('')">Ajouter un article</button>
         </div>
       </div>
 
@@ -64,10 +64,13 @@
               <td class="text-gray-600 text-sm sm:text-base font-medium">{{ item.quantiteStock }}</td>
               <td class="text-gray-600 text-sm sm:text-base font-medium">
                 <div class="flex items-center gap-x-3">
-                  <button class="bg-gray-100 w-8 h-8 flex items-center justify-center text-black rounded-md">
-                    <vue-feather size="18" stroke-width="2.1" type="eye"></vue-feather>
-                  </button>
-                  <button class="bg-gray-100 w-8 h-8 flex items-center justify-center text-black rounded-md">
+                  <router-link :to="'/articles/detail/' + index">
+                    <button class="bg-gray-100 w-8 h-8 flex items-center justify-center text-black rounded-md">
+                      <vue-feather size="18" stroke-width="2.1" type="eye"></vue-feather>
+                    </button>
+                  </router-link>
+                  <button class="bg-gray-100 w-8 h-8 flex items-center justify-center text-black rounded-md"
+                    @click="() => openModalEditArticle(item)">
                     <vue-feather size="18" stroke-width="2.1" type="edit-2"></vue-feather>
                   </button>
                   <button class="bg-gray-100 w-8 h-8 flex items-center justify-center text-black rounded-md"
@@ -173,17 +176,14 @@ const articleDetail = ref({})
 const isLoading = ref(false)
 const isLoadingDelete = ref(false)
 
-const openModalEditArticle = () => {
+const openModalEditArticle = (item) => {
   document.getElementById('edit-article').click()
 
-  articleDetail.value = {
-    title: 'Sac de voyage bassam',
-    prix: "24000",
-    prix_promo: "21000",
-    quantiteStock: "12"
+  if (item) {
+    articleDetail.value = item
+  } else {
+    articleDetail.value = {}
   }
-
-  console.log('dssds', articleDetail.value)
 }
 
 const alertDelete = (articleId) => {

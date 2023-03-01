@@ -129,7 +129,7 @@
         @click="saveArticle">
         <ProgressSpinner v-if="isLoadingDelete" style="width:25px;height:25px" strokeWidth="5" fill="none"
           animationDuration=".5s" aria-label="Custom ProgressSpinner" />
-        <span v-if="!isLoadingDelete">Enregistrer</span>
+        <span v-if="!isLoadingDelete">{{ article_Detail.nom ? 'Modifier' : 'Enregistrer'}}</span>
       </button>
     </div>
   </div>
@@ -159,6 +159,8 @@ const editor = useEditor({
   ],
 })
 
+const isLoadingDelete = ref(false)
+const files = ref([])
 const articleDataField = ref({
   title: '',
   category: '',
@@ -168,12 +170,11 @@ const articleDataField = ref({
   stock: '',
   images: []
 })
-const isLoadingDelete = ref(false)
-const files = ref([])
 
 watch(article_Detail, () => {
-  console.log('UPDATE VALUE', article_Detail.value)
-  articleDataField.value.title = article_Detail.value.title
+  articleDataField.value.title = article_Detail.value.nom
+  articleDataField.value.prix = article_Detail.value.prix
+  articleDataField.value.prix_promo = article_Detail.value.prix_promo
 })
 
 const choosefile = () => {

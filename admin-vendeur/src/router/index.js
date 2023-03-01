@@ -43,14 +43,14 @@ const router = createRouter({
         requiresAuth: true,
       },
     },
-    // {
-    //   path: "/articles/detail/:id",
-    //   name: "detail-article",
-    //   component: () => import("../views/articles/DetailArticle.vue"),
-    //   meta: {
-    //     requiresAuth: true,
-    //   },
-    // },
+    {
+      path: "/articles/detail/:id",
+      name: "article-detail",
+      component: () => import("../views/articles/ArticleDetail.vue"),
+      meta: {
+        requiresAuth: true,
+      },
+    },
     // {
     //   path: "/commandes",
     //   name: "commandes",
