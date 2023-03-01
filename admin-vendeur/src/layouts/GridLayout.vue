@@ -27,7 +27,7 @@
               <p class="text-base font-semibold">Mes articles</p>
             </div>
           </router-link>
-          <router-link to="/">
+          <router-link to="/commandes">
             <div
               class="hover:bg-orange-50 hover:text-orange-400 text-gray-800 hover:shadow-sm hover:shadow-custom-orange/10 rounded-md px-4 h-11 flex items-center gap-x-2 mt-3 cursor-pointer">
               <vue-feather size="22" stroke-width="2.1" type="shopping-bag"></vue-feather>
@@ -78,7 +78,7 @@
                 <p class="text-base font-semibold">Mes articles</p>
               </div>
             </router-link>
-            <router-link to="/">
+            <router-link to="/commandes">
               <div
                 class="hover:bg-orange-50 hover:text-orange-400 text-gray-800 hover:shadow-sm hover:shadow-custom-orange/10 rounded-md px-4 h-11 flex items-center gap-x-2 mt-3 cursor-pointer">
                 <vue-feather size="22" stroke-width="2.1" type="shopping-bag"></vue-feather>
@@ -103,7 +103,7 @@
         </aside>
       </Sidebar>
 
-      <header class="div2 bg-white h-16 border-b px-5 flex items-center justify-between">
+      <header class="div2 sticky top-0 w-full bg-white h-16 border-b px-5 flex items-center justify-between">
         <div class="h-full flex lg:hidden items-center">
           <h1 class="text-2xl font-extrabold text-custom-orange">Celchap.</h1>
         </div>

@@ -51,14 +51,14 @@ const router = createRouter({
         requiresAuth: true,
       },
     },
-    // {
-    //   path: "/commandes",
-    //   name: "commandes",
-    //   component: () => import("../views/commandes/Commandes.vue"),
-    //   meta: {
-    //     requiresAuth: true,
-    //   },
-    // },
+    {
+      path: "/commandes",
+      name: "commandes",
+      component: () => import("../views/commandes/Commandes.vue"),
+      meta: {
+        requiresAuth: true,
+      },
+    },
     // {
     //   path: "/commandes/detail/:id",
     //   name: "detail-commande",

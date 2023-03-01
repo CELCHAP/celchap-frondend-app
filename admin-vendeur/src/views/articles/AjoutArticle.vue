@@ -121,11 +121,11 @@
     <div class="column-action modal-action pt-5">
 
       <button :disabled="isLoadingDelete"
-        class="bg-gray-300 w-1/2 h-10 flex items-center justify-center rounded-md text-black font-bold"
+        class="bg-gray-300 w-1/2 h-10 flex items-center justify-center rounded-md text-sm sm:text-base text-black font-bold"
         @click="closeModal">Annuler</button>
 
       <button :disabled="isLoadingDelete"
-        class="custom-btn bg-custom-orange w-1/2 h-10 flex items-center justify-center rounded-md font-bold text-white"
+        class="custom-btn bg-custom-orange w-1/2 h-10 flex items-center justify-center rounded-md font-bold text-sm sm:text-base text-white"
         @click="saveArticle">
         <ProgressSpinner v-if="isLoadingDelete" style="width:25px;height:25px" strokeWidth="5" fill="none"
           animationDuration=".5s" aria-label="Custom ProgressSpinner" />
