@@ -6,7 +6,9 @@
           <h1 class="text-3xl text-custom-orange text-center font-extrabold">Celchap.</h1>
         </div>
         <div class="mt-10">
-          <div class="w-16 h-16 mx-auto rounded-full bg-gray-200"></div>
+          <div class="w-16 h-16 mx-auto rounded-full bg-gray-200 flex items-center justify-center">
+            <vue-feather size="30" stroke-width="2.1" type="user"></vue-feather>
+          </div>
           <div class="mt-3 px-4">
             <p class="text-center text-black text-sm lg:text-base font-semibold">N'da Adams Aimé-Désiré Anicet</p>
             <p class="text-center text-gray-400 text-sm lg:text-base font-medium">+225 0778812111</p>
@@ -57,7 +59,9 @@
             <h1 class="text-3xl text-custom-orange text-center font-extrabold">Celchap.</h1>
           </div> -->
           <div class="mt-">
-            <div class="w-16 h-16 mx-auto rounded-full bg-gray-200"></div>
+            <div class="w-16 h-16 mx-auto rounded-full bg-gray-200 flex items-center justify-center">
+              <vue-feather size="30" stroke-width="2.1" type="user"></vue-feather>
+            </div>
             <div class="mt-3 px-4">
               <p class="text-center text-black text-sm lg:text-base font-semibold">N'da Adams Aimé-Désiré Anicet</p>
               <p class="text-center text-gray-400 text-sm lg:text-base font-medium">+225 0778812111</p>
@@ -103,10 +107,12 @@
         </aside>
       </Sidebar>
 
-      <header class="div2 sticky top-0 w-full bg-white h-16 border-b px-5 flex items-center justify-between">
-        <div class="h-full flex lg:hidden items-center">
-          <h1 class="text-2xl font-extrabold text-custom-orange">Celchap.</h1>
-        </div>
+      <header class="div2 sticky top-0 w-full bg-white h-16 border-b px-5 flex items-center justify-between z-50">
+        <router-link to="/dashboard">
+          <div class="h-full flex lg:hidden items-center">
+            <h1 class="text-2xl font-extrabold text-custom-orange">Celchap.</h1>
+          </div>
+        </router-link>
         <div class="h-full flex lg:hidden items-center">
           <button icon="pi pi-arrow-right" @click="visibleLeft = true" class="flex items-center justify-center">
             <vue-feather size="30" stroke-width="2.1" type="menu"></vue-feather>

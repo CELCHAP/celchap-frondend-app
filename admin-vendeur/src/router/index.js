@@ -59,43 +59,43 @@ const router = createRouter({
         requiresAuth: true,
       },
     },
-    // {
-    //   path: "/commandes/detail/:id",
-    //   name: "detail-commande",
-    //   component: () => import("../views/commandes/DetailCommande.vue"),
-    //   meta: {
-    //     requiresAuth: true,
-    //   },
-    // },
-    // {
-    //   path: "/compte",
-    //   redirect: "/compte/profil",
-    //   name: "compte",
-    //   component: () => import("../views/compte/Compte.vue"),
-    //   children: [
-    //     {
-    //       path: 'profil',
-    //       component: () => import("../views/compte/Profil.vue"),
-    //       meta: {
-    //         requiresAuth: true,
-    //       },
-    //     },
-    //     {
-    //       path: 'boutique',
-    //       component: () => import("../views/compte/InfoBoutique.vue"),
-    //       meta: {
-    //         requiresAuth: true,
-    //       },
-    //     },
-    //     {
-    //       path: 'identifiant',
-    //       component: () => import("../views/compte/ChangePassword.vue"),
-    //       meta: {
-    //         requiresAuth: true,
-    //       },
-    //     },
-    //   ],
-    // },
+    {
+      path: "/commandes/detail/:id",
+      name: "detail-commande",
+      component: () => import("../views/commandes/CommandeDetail.vue"),
+      meta: {
+        requiresAuth: true,
+      },
+    },
+    {
+      path: "/parametres",
+      redirect: "/parametres/boutique",
+      name: "parametres",
+      component: () => import("../views/parametres/Parametres.vue"),
+      children: [
+        {
+          path: 'boutique',
+          component: () => import("../views/parametres/ParametreBoutique.vue"),
+          meta: {
+            requiresAuth: true,
+          },
+        },
+        {
+          path: 'compte',
+          component: () => import("../views/parametres/ParametreCompte.vue"),
+          meta: {
+            requiresAuth: true,
+          },
+        },
+        // {
+        //   path: 'identifiant',
+        //   component: () => import("../views/parametres/ChangePassword.vue"),
+        //   meta: {
+        //     requiresAuth: true,
+        //   },
+        // },
+      ],
+    },
     {
       // the 404 route, when none of the above matches
       path: "/404",

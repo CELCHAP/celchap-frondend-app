@@ -25,8 +25,11 @@
       <div class="my-16">
         <div class="flex items-center justify-between">
           <h2 class="text-xl md:text-2xl text-black font-bold">Vos commandes récentes</h2>
-          <button class="bg-custom-orange text-sm sm:text-base text-white font-bold w-28 sm:w-32 h-9 rounded-md">Tout
-            voir</button>
+          <router-link to="/commandes">
+            <button class="bg-custom-orange text-sm sm:text-base text-white font-bold w-28 sm:w-32 h-9 rounded-md">
+              Tout voir
+            </button>
+          </router-link>
         </div>
 
         <div className="overflow-x-auto mt-5">

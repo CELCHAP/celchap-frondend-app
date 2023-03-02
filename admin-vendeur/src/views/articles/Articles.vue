@@ -9,7 +9,7 @@
         <div class="dropdown block sm:hidden">
           <label tabindex="0">
             <button
-              class="w-28 h-10 bg-sky-200 flex items-center justify-center gap-x-3 rounded-md text-gray-700 font-bold shadow-sm">
+              class="w-24 h-9 bg-sky-200 flex items-center justify-center gap-x-3 rounded-md text-gray-700 font-extrabold shadow-sm">
               <vue-feather size="18" stroke-width="2.1" type="filter"></vue-feather>
               <span class="text-xs sm:text-sm">Filtres</span>
             </button>
