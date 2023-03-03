@@ -46,7 +46,7 @@
         </div>
         <div class="absolute w-full bottom-5 px-4 flex items-center justify-center">
           <div
-            class="w-full bg-black text-white shadow-lg rounded-md px-6 h-11 flex items-center justify-center gap-x-2 mt-3 cursor-pointer">
+            class="w-full bg-black text-white shadow-lg rounded-md px-6 h-10 flex items-center justify-center gap-x-2 mt-3 cursor-pointer">
             <vue-feather size="20" stroke-width="2.1" type="log-out"></vue-feather>
             <p class="text-sm font-semibold">Déconnexion</p>
           </div>

@@ -37,10 +37,10 @@ const items = ref([
   font-size: 14px;
 }
 .p-tabmenu .p-tabmenu-nav .p-tabmenuitem.p-highlight .p-menuitem-link {
-  color: #facc15 !important;
-  border-color: #facc15 !important;
+  color: #000 !important;
+  border-color: #000 !important;
   font-weight: 600;
-  background-color: #262626;
+  background-color: #f2f2f2;
   border-radius: 0 !important;
   font-size: 14px;
 }
