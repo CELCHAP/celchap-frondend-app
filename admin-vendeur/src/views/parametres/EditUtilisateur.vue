@@ -18,60 +18,38 @@
       <div class="flex items-center gap-x-3">
         <div class="form-control w-full">
           <label class="label">
-            <span class="label-text text-sm sm:text-base font-semibold">Nom de la boutique</span>
+            <span class="label-text text-sm sm:text-base font-semibold">Nom</span>
           </label>
-          <input type="text" placeholder="My little market" class="input input-bordered w-full font-medium rounded-md" />
+          <input type="text" placeholder="N'da" class="input input-bordered w-full font-medium rounded-md" />
         </div>
 
         <div class="form-control w-full mt-2">
           <label class="label">
-            <span class="label-text text-sm sm:text-base font-semibold">Catégorie de la boutique</span>
+            <span class="label-text text-sm sm:text-base font-semibold">Prénoms</span>
           </label>
-          <select class="select select-bordered font-medium rounded-md">
-            <option value="" disabled selected>Choisir une catégorie</option>
-            <option>Han Solo</option>
-            <option>Greedo</option>
-          </select>
+          <input type="text" placeholder="Adams Aimé-Désiré" class="input input-bordered w-full font-medium rounded-md" />
         </div>
       </div>
 
       <div class="form-control w-full mt-2">
         <label class="label">
-          <span class="label-text text-sm sm:text-base font-semibold">Contact de la boutique</span>
+          <span class="label-text text-sm sm:text-base font-semibold">Numéro de téléphone</span>
         </label>
         <input type="text" placeholder="0778812111" class="input input-bordered w-full font-medium rounded-md" />
       </div>
-
+      
       <div class="form-control w-full mt-2">
         <label class="label">
-          <span class="label-text text-sm sm:text-base font-semibold">Description de la boutique</span>
+          <span class="label-text text-sm sm:text-base font-semibold">Email</span>
         </label>
-        <textarea type="text" placeholder="0778812111"
-          class="h-32 input input-bordered w-full font-medium rounded-md py-3"></textarea>
+        <input type="text" placeholder="ad.aimedesire@gmail.com" class="input input-bordered w-full font-medium rounded-md" />
       </div>
-
+      
       <div class="form-control w-full mt-2">
         <label class="label">
-          <span class="label-text text-sm sm:text-base font-semibold">Lien des réseaux sociaux</span>
+          <span class="label-text text-sm sm:text-base font-semibold">Lieu d'habitation</span>
         </label>
-        <div class="flex items-center gap-x-3">
-          <div class="w-12 h-10 flex items-center justify-center bg-yellow-300 text-black rounded-md">
-            <vue-feather stroke-width="1.5" type="facebook" size="21"></vue-feather>
-          </div>
-          <input type="text" placeholder="http://twitter.com/dams9ix" class="input input-bordered w-full font-medium rounded-md" />
-        </div>
-        <div class="flex items-center gap-x-3 mt-3">
-          <div class="w-12 h-10 flex items-center justify-center bg-yellow-300 text-black rounded-md">
-            <vue-feather stroke-width="1.5" type="instagram" size="21"></vue-feather>
-          </div>
-          <input type="text" placeholder="http://twitter.com/dams9ix" class="input input-bordered w-full font-medium rounded-md" />
-        </div>
-        <div class="flex items-center gap-x-3 mt-3">
-          <div class="w-12 h-10 flex items-center justify-center bg-yellow-300 text-black rounded-md">
-            <vue-feather stroke-width="1.5" type="twitter" size="21"></vue-feather>
-          </div>
-          <input type="text" placeholder="http://twitter.com/dams9ix" class="input input-bordered w-full font-medium rounded-md" />
-        </div>
+        <input type="text" placeholder="Cocody" class="input input-bordered w-full font-medium rounded-md" />
       </div>
     </div>
 
@@ -96,25 +74,23 @@ import { watch, ref, toRefs } from 'vue';
 import ProgressSpinner from 'primevue/progressspinner';
 
 const props = defineProps({
-  boutiqueInfo: Object,
+  utilisateurInfo: Object,
 });
 
-const { boutiqueInfo } = toRefs(props)
+const { utilisateurInfo } = toRefs(props)
 
 const isLoadingUpdate = ref(false)
 const file = ref("")
-const boutiqueFields = ref({
+const utilisateurFields = ref({
   nom: '',
-  categorie: '',
-  description: '',
-  contact: '',
+  prenoms: '',
+  telephone: '',
+  email: '',
+  residence: '',
   photo: '',
-  lienFacebook: '',
-  lienInstagram: '',
-  lienTwitter: '',
 })
 
-watch(boutiqueInfo, () => {
+watch(utilisateurInfo, () => {
 
 })
 
@@ -137,7 +113,7 @@ const filePreview = (file) => {
 }
 
 const closeModal = () => {
-  document.getElementById('edit-boutique').click()
+  document.getElementById('edit-utilisateur').click()
 }
 
 const saveModification = () => {

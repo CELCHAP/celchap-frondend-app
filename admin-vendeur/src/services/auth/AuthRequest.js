@@ -6,7 +6,7 @@ export const signIn = async (values) => {
 }
 
 export const signUp = async (values) => {
-    return await axios.post(BASE_URL("singup"), values)
+    return await axios.post(BASE_URL("register"), values)
 }
 
 export const resetPassword = async(values)=>{

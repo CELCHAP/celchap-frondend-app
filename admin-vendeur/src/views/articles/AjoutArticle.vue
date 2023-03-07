@@ -121,7 +121,7 @@
     <div class="column-action modal-action pt-5">
 
       <button :disabled="isLoadingDelete"
-        class="bg-gray-300 w-1/2 h-10 flex items-center justify-center rounded-md text-sm sm:text-base text-black font-bold"
+        class="bg-neutral-800 w-1/2 h-10 flex items-center justify-center rounded-md text-sm sm:text-base text-white font-bold"
         @click="closeModal">Annuler</button>
 
       <button :disabled="isLoadingDelete"

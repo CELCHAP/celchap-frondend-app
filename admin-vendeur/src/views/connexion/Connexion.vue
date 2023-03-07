@@ -52,8 +52,11 @@
 
 <script setup>
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 import ProgressSpinner from 'primevue/progressspinner';
 import { signIn } from './../../services/auth/AuthRequest'
+
+const router = useRouter()
 
 const isLogging = ref(false)
 const username = ref("")
@@ -66,14 +69,19 @@ const loginUser = () => {
   errorMessage.value = ""
 
   const data = {
-    numero: username,
-    password: password
+    phone: username.value,
+    password: password.value
   }
 
   try {
     signIn(data).then((res) => {
       console.log(res)
       isLogging.value = false
+      if (!res.data.user.boutique_id) {
+        router.push({ path: 'create-store' })
+      } else {
+        router.push({ path: 'dashboard' })
+      }
     }).catch(err => {
       console.log(err)
       if (err.code === "ERR_NETWORK") {
@@ -93,20 +101,20 @@ const loginUser = () => {
 
   100%,
   0% {
-    stroke: #fff;
+    stroke: #fff !important;
   }
 
   40% {
-    stroke: #cccccc;
+    stroke: #fff !important;
   }
 
   66% {
-    stroke: #fff;
+    stroke: #fff !important;
   }
 
   80%,
   90% {
-    stroke: #ffc100;
+    stroke: #fff !important;
   }
 }
 </style>

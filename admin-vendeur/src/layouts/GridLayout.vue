@@ -6,11 +6,15 @@
           <h1 class="text-3xl text-custom-orange text-center font-extrabold">Celchap.</h1>
         </div>
         <div class="mt-10">
-          <div class="w-16 h-16 mx-auto rounded-full bg-gray-200 flex items-center justify-center">
-            <vue-feather size="30" stroke-width="2.1" type="user"></vue-feather>
-          </div>
+          <router-link to="/paremetres/compte">
+            <div class="w-16 h-16 mx-auto rounded-full bg-gray-200 flex items-center justify-center">
+              <vue-feather size="30" stroke-width="2.1" type="user"></vue-feather>
+            </div>
+          </router-link>
           <div class="mt-3 px-4">
-            <p class="text-center text-black text-sm lg:text-base font-semibold">N'da Adams Aimé-Désiré Anicet</p>
+            <router-link to="/parametres/compte">
+              <p class="text-center text-black text-sm lg:text-base font-semibold">N'da Adams Aimé-Désiré Anicet</p>
+            </router-link>
             <p class="text-center text-gray-400 text-sm lg:text-base font-medium">+225 0778812111</p>
           </div>
         </div>
@@ -59,11 +63,15 @@
             <h1 class="text-3xl text-custom-orange text-center font-extrabold">Celchap.</h1>
           </div> -->
           <div class="mt-">
-            <div class="w-16 h-16 mx-auto rounded-full bg-gray-200 flex items-center justify-center">
-              <vue-feather size="30" stroke-width="2.1" type="user"></vue-feather>
-            </div>
+            <router-link to="/parametres/compte">
+              <div class="w-16 h-16 mx-auto rounded-full bg-gray-200 flex items-center justify-center">
+                <vue-feather size="30" stroke-width="2.1" type="user"></vue-feather>
+              </div>
+            </router-link>
             <div class="mt-3 px-4">
-              <p class="text-center text-black text-sm lg:text-base font-semibold">N'da Adams Aimé-Désiré Anicet</p>
+              <router-link to="/parametres/compte">
+                <p class="text-center text-black text-sm lg:text-base font-semibold">N'da Adams Aimé-Désiré Anicet</p>
+              </router-link>
               <p class="text-center text-gray-400 text-sm lg:text-base font-medium">+225 0778812111</p>
             </div>
           </div>

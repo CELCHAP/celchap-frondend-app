@@ -2,7 +2,7 @@
   <div class="mt-3">
     <!-- <h1 class="text-2xl text-black text-center font-bold">A propos de la boutique</h1> -->
 
-    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-x-5">
+    <div class="flex flex-col sm:flex-row items-start sm:items-start justify-between gap-x-5">
       <div class="flex items-start gap-x-5">
         <div class="bg-gray-200 w-24 h-24 sm:w-32 sm:h-32 text-black rounded-md flex items-center justify-center">
           <vue-feather size="30" stroke-width="2.1" type="image"></vue-feather>
@@ -16,7 +16,7 @@
       </div>
       <div class="mt-5 w-full sm:w-fit">
         <button
-          class="bg-black text-sm text-custom-jaune font-bold w-full sm:w-fit h-9 px-3 shadow-lg rounded-md" @click="openModalEditBoutique">
+          class="bg-black text-sm text-custom-jaune font-bold w-full sm:w-fit h-fit py-1.5 px-3 shadow-lg rounded-md" @click="openModalEditBoutique">
           Modifier les informations
         </button>
       </div>
@@ -68,7 +68,7 @@
     <input type="checkbox" id="edit-boutique" class="modal-toggle" />
     <div class="modal">
       <div class="modal-box w-11/12 max-w-xl">
-        <h3 class="font-extrabold text-xl text-black text-">Modifier les informations</h3>
+        <h3 class="font-extrabold text-xl text-custom-orange">Modifier les informations</h3>
         <div class="modal-ajout-article mt-5">
           <EditBoutique :boutiqueInfo="boutiqueDetail" />
         </div>

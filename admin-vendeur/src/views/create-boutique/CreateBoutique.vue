@@ -4,24 +4,35 @@
       <h1 class="text-3xl text-custom-orange font-extrabold">Celchap.</h1>
     </div>
 
-    <div class="mt-20">
+    <div class="mt-20 pb-28">
       <div class="mt-10">
         <div class="bg-white w-11/12 sm:w-[500px] h-fit mx-auto border p-4 rounded-md shadow-xl">
-          <h3 class="text-center text-xl text-black font-extrabold">Inscription</h3>
+          <h3 class="text-center text-xl text-black font-extrabold">Créez votre première boutique</h3>
 
-          <div class="mt-6">
+          <div class="mt-10">
             <div class="flex flex-col sm:flex-col items-center gap-x-3">
               <div class="form-control w-full">
                 <label class="label">
-                  <span class="label-text text-gray-500 font-semibold">Nom complet</span>
+                  <span class="label-text text-gray-500 font-semibold">Nom de la boutique</span>
                 </label>
                 <input type="text" placeholder="N'da Adams Aimé-Désiré"
-                  class="font-medium input input-bordered w-full rounded-md" v-model="fields.fullname" />
+                  class="font-medium input input-bordered w-full rounded-md" v-model="fields.name" />
               </div>
             </div>
             <div class="form-control w-full">
               <label class="label">
-                <span class="label-text text-gray-500 font-semibold">Numéro de téléphone</span>
+                <span class="label-text text-gray-500 font-semibold">Catégorie</span>
+              </label>
+              <select class="select select-bordered font-medium rounded-md" v-model="fields.category">
+                <option value="" disabled selected>Choisir une catégorie</option>
+                <option value="+225">+225 (Côte d'Ivoire)</option>
+                <option value="+237">+237 (Cameroun)</option>
+                <option value="+241">+241 (Gabon)</option>
+              </select>
+            </div>
+            <div class="form-control w-full">
+              <label class="label">
+                <span class="label-text text-gray-500 font-semibold">Numéro de la boutique</span>
               </label>
               <div class="flex items-center gap-x-3">
                 <select class="select select-bordered font-medium rounded-md w-28" v-model="fields.indicatif">
@@ -36,31 +47,18 @@
             </div>
             <div class="form-control w-full">
               <label class="label">
-                <span class="label-text text-gray-500 font-semibold">Email</span>
+                <span class="label-text text-gray-500 font-semibold">Description de la boutique</span>
               </label>
-              <input type="email" placeholder="email@gmail.com" class="font-medium input input-bordered w-full rounded-md"
-                v-model="fields.email" />
+              <textarea type="text" placeholder="Parlez un peu de votre boutique"
+                class="font-medium input input-bordered w-full rounded- py-1.5 h-32"
+                v-model="fields.description"></textarea>
             </div>
             <div class="form-control w-full">
               <label class="label">
-                <span class="label-text text-gray-500 font-semibold">Lieu de résidence</span>
-              </label>
-              <input type="text" placeholder="Cocody Rivera" class="font-medium input input-bordered w-full rounded-md"
-                v-model="fields.localisation" />
-            </div>
-            <div class="form-control w-full">
-              <label class="label">
-                <span class="label-text text-gray-500 font-semibold">Mot de passe</span>
-              </label>
-              <input type="password" placeholder="******" class="font-medium input input-bordered w-full rounded-md"
-                v-model="fields.password" />
-            </div>
-            <div class="form-control w-full">
-              <label class="label">
-                <span class="label-text text-gray-500 font-semibold">Photo de profil</span>
+                <span class="label-text text-gray-500 font-semibold">Photo de profil de la boutique</span>
               </label>
               <div class="w-12 h-12 mx-auto rounded-full border border-2 flex items-center justify-center">
-                <vue-feather stroke-width="2.2" type="user" size="18"></vue-feather>
+                <vue-feather stroke-width="2.2" type="shopping-bag" size="18"></vue-feather>
                 <img v-if="fields.image" :src="filePreview(fields.image)" alt=""
                   class="object-cover w-full h-full rounded-full">
               </div>
@@ -76,11 +74,11 @@
 
             <div class="mt-6 mb-1">
               <button :disabled="isLogging"
-                class="inscription bg-black text-white font-extrabold w-full h-11 rounded-md shadow-md flex items-center justify-center"
+                class="bg-black text-white font-extrabold w-full h-11 rounded-md shadow-md flex items-center justify-center"
                 @click="createAccount">
                 <ProgressSpinner v-if="isLogging" style="width:25px;height:25px" strokeWidth="5" fill="none"
                   animationDuration=".5s" aria-label="Custom ProgressSpinner" />
-                <span v-if="!isLogging">Je m'inscris</span>
+                <span v-if="!isLogging">Démarrer</span>
               </button>
             </div>
             <div v-if="errorMessage" class="mt-3">
@@ -89,12 +87,6 @@
           </div>
         </div>
       </div>
-
-      <div class="mt-10 pb-20">
-        <p class="text-center font-semibold">Déjà un compte ? <router-link to="/connexion">
-            <button class="text-custom-orange underline font-extrabold">Se connecter</button>
-          </router-link></p>
-      </div>
     </div>
   </div>
 </template>
@@ -102,18 +94,18 @@
 <script setup>
 import { ref } from 'vue';
 import ProgressSpinner from 'primevue/progressspinner';
-import { signUp } from './../../services/auth/AuthRequest'
+import { signUp } from '../../services/auth/AuthRequest'
 
-const isLogging = ref(true)
+const isLogging = ref(false)
 const errorMessage = ref("")
 
 const fields = ref({
-  fullname: '',
+  name: '',
   indicatif: '',
   phone: '',
-  localisation: '',
-  email: '',
-  password: '',
+  devise: '',
+  description: '',
+  category: '',
   image: ''
 })
 
@@ -155,7 +147,6 @@ const createAccount = () => {
 
 <style>
 @keyframes p-progress-spinner-color {
-
   100%,
   0% {
     stroke: #fff;
