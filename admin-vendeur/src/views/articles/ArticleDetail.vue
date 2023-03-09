@@ -4,7 +4,7 @@
       <div>
         <router-link to="/articles">
           <button
-            class="bg-orange-100 text-sm text-black font-bold w-24 sm:w-28 h-8 sm:h-9 rounded-full flex items-center justify-center gap-2">
+            class="bg-violet-200 text-sm text-black font-bold w-24 sm:w-28 h-8 sm:h-9 rounded-full flex items-center justify-center gap-2">
             <vue-feather type="arrow-left-circle" size="18"></vue-feather>Retour
           </button>
         </router-link>
@@ -30,15 +30,15 @@
         <div class="flex flex-col-reverse gap-y-5 sm:grid sm:grid-cols-5 gap-x-4 mt-10 pb-16">
           <div class="w-full h-fit grid grid-cols-2 lg:grid-cols-3 gap-3 rounded-md col-span-2">
             <div class="bg-white w-full h-32 rounded-lg border">
-              <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fcdn1.jolicloset.com%2Fimg4%2Ffull%2F2019%2F05%2F126405-1.jpg&f=1&nofb=1&ipt=5c3e8615a3dafdd9efff8e335d86e3f0da53fded2c20e1017f64ec8a787fddea&ipo=images" alt="" class="object-cover w-full h-full rounded-lg">
+              <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fcdn1.jolicloset.com%2Fimg4%2Ffull%2F2019%2F05%2F126405-1.jpg&f=1&nofb=1&ipt=5c3e8615a3dafdd9efff8e335d86e3f0da53fded2c20e1017f64ec8a787fddea&ipo=images" alt="" class="object-cover w-full h-full rounded-md">
             </div>
-            <div class="bg-white w-full h-32 rounded-lg border">
-              <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fcdn1.jolicloset.com%2Fimg4%2Ffull%2F2019%2F09%2F143973-1.jpg&f=1&nofb=1&ipt=ae0c7c82ba93d9095da06e63fcd3f1244106804f7e0c154e1b4652dec0ec25ce&ipo=images" alt="" class="object-cover w-full h-full rounded-lg">
+            <div class="bg-orange-100 w-full h-32 rounded-md">
+              <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fcdn1.jolicloset.com%2Fimg4%2Ffull%2F2019%2F09%2F143973-1.jpg&f=1&nofb=1&ipt=ae0c7c82ba93d9095da06e63fcd3f1244106804f7e0c154e1b4652dec0ec25ce&ipo=images" alt="" class="object-cover w-full h-full rounded-md">
             </div>
-            <div class="bg-white w-full h-32 rounded-lg border"></div>
-            <div class="bg-white w-full h-32 rounded-lg border"></div>
-            <div class="bg-white w-full h-32 rounded-lg border"></div>
-            <div class="bg-white w-full h-32 rounded-lg border"></div>
+            <div class="bg-orange-100 w-full h-32 rounded-md"></div>
+            <div class="bg-orange-100 w-full h-32 rounded-md"></div>
+            <div class="bg-orange-100 w-full h-32 rounded-md"></div>
+            <div class="bg-orange-100 w-full h-32 rounded-md"></div>
           </div>
           <div class="bg-white w-full h-fit rounded-md shadow-sm col-span-3 p-3 sm:p-5">
             <div class="flex flex-col gap-y-5">

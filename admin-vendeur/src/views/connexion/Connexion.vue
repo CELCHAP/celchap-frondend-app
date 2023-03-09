@@ -1,6 +1,6 @@
 <template>
   <div class="w-full min-h-screen bg-gray-50">
-    <div class="w-full h-16 flex items-center justify-center">
+    <div class="w-full h-16 flex items-center justify-center pt-5">
       <h1 class="text-3xl text-custom-orange font-extrabold">Celchap.</h1>
     </div>
 
@@ -75,10 +75,10 @@ const loginUser = () => {
 
   try {
     signIn(data).then((res) => {
-      console.log(res)
       isLogging.value = false
+      localStorage.setItem("access", res.data.access_token)
       if (!res.data.user.boutique_id) {
-        router.push({ path: 'create-store' })
+        router.push({ path:'nouvelle-boutique', replace: true })
       } else {
         router.push({ path: 'dashboard' })
       }
@@ -86,6 +86,8 @@ const loginUser = () => {
       console.log(err)
       if (err.code === "ERR_NETWORK") {
         errorMessage.value = "Vérifiez votre connexion internet et rééssayez"
+      } else {
+        errorMessage.value = err.response.data.message
       }
       isLogging.value = false
     })

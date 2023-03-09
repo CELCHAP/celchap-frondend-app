@@ -1,6 +1,6 @@
 <template>
   <div class="w-full min-h-screen bg-gray-50">
-    <div class="w-full h-16 flex items-center justify-center">
+    <div class="w-full h-16 flex items-center justify-center pt-5">
       <h1 class="text-3xl text-custom-orange font-extrabold">Celchap.</h1>
     </div>
 
@@ -101,8 +101,11 @@
 
 <script setup>
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 import ProgressSpinner from 'primevue/progressspinner';
 import { signUp } from './../../services/auth/AuthRequest'
+
+const router = useRouter()
 
 const isLogging = ref(true)
 const errorMessage = ref("")
@@ -136,9 +139,9 @@ const createAccount = () => {
 
   try {
     signUp(fields.value).then((res) => {
-      console.log(res)
       isLogging.value = false
       localStorage.setItem("access", res.data.access_token)
+      router.push({ path: 'create-store' })
     }).catch(err => {
       console.log(err)
       if (err.code === "ERR_NETWORK") {

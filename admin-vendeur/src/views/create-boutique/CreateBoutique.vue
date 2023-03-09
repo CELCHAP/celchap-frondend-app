@@ -1,6 +1,6 @@
 <template>
   <div class="w-full min-h-screen bg-gray-50">
-    <div class="w-full h-16 flex items-center justify-center">
+    <div class="w-full h-fit flex flex-col items-center justify-center pt-5">
       <h1 class="text-3xl text-custom-orange font-extrabold">Celchap.</h1>
     </div>
 
@@ -92,12 +92,18 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
+import { useRouter } from 'vue-router';
 import ProgressSpinner from 'primevue/progressspinner';
 import { signUp } from '../../services/auth/AuthRequest'
+import { getUserAndStoreConnected } from '../../services/utilisateur/UtilisateurRequest'
+import { getCategories } from '../../services/categorie/CategorieRequest'
+
+const router = useRouter()
 
 const isLogging = ref(false)
 const errorMessage = ref("")
+const userInfo = ref(null)
 
 const fields = ref({
   name: '',
@@ -107,6 +113,24 @@ const fields = ref({
   description: '',
   category: '',
   image: ''
+})
+
+// Vérifie si l'utilisateur à déjà une boutique
+// Si 'OUI' redirige vers le dashboard
+// Si 'NON' crée la boutique
+onMounted(() => {
+  getUserAndStoreConnected().then(res => {
+    userInfo.value = res.data.auth[0]
+
+    if (userInfo.value.boutique_id !== null) {
+      router.push({ path: 'dashboard', replace: true })
+    }
+  }).catch(err => console.log(err))
+  
+  getCategories().then(res => {
+    console.log('c', res.data)
+
+  }).catch(err => console.log(err))
 })
 
 const choosefile = () => {
@@ -147,6 +171,7 @@ const createAccount = () => {
 
 <style>
 @keyframes p-progress-spinner-color {
+
   100%,
   0% {
     stroke: #fff;
