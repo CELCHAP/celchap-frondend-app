@@ -1,6 +1,8 @@
 import { createApp } from 'vue'
 import './style.css'
 import App from './App.vue'
+import { SnackbarService, Vue3Snackbar } from "vue3-snackbar";
+import "vue3-snackbar/styles";
 import VueProgressBar from "@aacassandra/vue3-progressbar";
 import VueFeather from 'vue-feather';
 import PrimeVue from 'primevue/config';
@@ -29,6 +31,8 @@ const options = {
 app.use(router);
 app.use(VueProgressBar, options);
 app.use(PrimeVue);
+app.use(SnackbarService);
 app.component(VueFeather.name, VueFeather);
+app.component("vue3-snackbar", Vue3Snackbar);
 
 app.mount('#app')

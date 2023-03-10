@@ -111,6 +111,11 @@
           </div>
         </div>
       </div>
+
+
+      <teleport to="body">
+        <vue3-snackbar bottom :duration="40000" dense shadow></vue3-snackbar>
+      </teleport>
     </div>
   </GridLayout>
 </template>
@@ -119,6 +124,8 @@
 import { ref } from 'vue';
 import GridLayout from '../../layouts/GridLayout.vue';
 import ProgressSpinner from 'primevue/progressspinner';
+import { useSnackbar } from "vue3-snackbar";
+const snackbar = useSnackbar();
 
 const commandesRecentes = ref([
   {
@@ -139,6 +146,12 @@ const alertDelete = (commandeId) => {
 const deleteCommande = () => {
   isLoadingDelete.value = true
   setTimeout(() => {
+    snackbar.add({
+      type: 'success',
+      text: 'La commande a été supprimé avec succès',
+      dismissible: true,
+      background: "#10b981"
+    })
     isLoadingDelete.value = false
     document.getElementById('modal-delete').click()
   }, 3000);
@@ -166,6 +179,16 @@ const deleteCommande = () => {
   80%,
   90% {
     stroke: #000;
+  }
+}
+
+.vue3-snackbar-message-wrapper {
+  color: black;
+}
+
+@media screen and (max-width: 640px) {
+  .vue3-snackbar-message-wrapper {
+    font-size: 12px;
   }
 }
 </style>
