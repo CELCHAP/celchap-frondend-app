@@ -107,7 +107,7 @@ import { signUp } from './../../services/auth/AuthRequest'
 
 const router = useRouter()
 
-const isLogging = ref(true)
+const isLogging = ref(false)
 const errorMessage = ref("")
 
 const fields = ref({
@@ -141,11 +141,13 @@ const createAccount = () => {
     signUp(fields.value).then((res) => {
       isLogging.value = false
       localStorage.setItem("access", res.data.access_token)
-      router.push({ path: 'create-store' })
+      router.push({ path:'nouvelle-boutique', replace: true })
     }).catch(err => {
       console.log(err)
       if (err.code === "ERR_NETWORK") {
-        errorMessage.value = "Vérifiez votre connexion internet et rééssayez"
+        errorMessage.value = "Vérifiez votre connexion internet et rééssayez !"
+      } else {
+        errorMessage.value = "Une erreur s'est produite, rééssayez !"
       }
       isLogging.value = false
     })

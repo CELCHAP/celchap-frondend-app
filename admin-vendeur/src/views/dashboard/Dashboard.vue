@@ -114,7 +114,7 @@
 
 
       <teleport to="body">
-        <vue3-snackbar bottom :duration="40000" dense shadow></vue3-snackbar>
+        <vue3-snackbar bottom :duration="4000" dense shadow></vue3-snackbar>
       </teleport>
     </div>
   </GridLayout>
@@ -165,20 +165,20 @@ const deleteCommande = () => {
 
   100%,
   0% {
-    stroke: #000;
+    stroke: #fff;
   }
 
   40% {
-    stroke: #000;
+    stroke: #fff;
   }
 
   66% {
-    stroke: #000;
+    stroke: #fff;
   }
 
   80%,
   90% {
-    stroke: #000;
+    stroke: #fff;
   }
 }
 

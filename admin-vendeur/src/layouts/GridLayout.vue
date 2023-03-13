@@ -13,9 +13,9 @@
           </router-link>
           <div class="mt-3 px-4">
             <router-link to="/parametres/compte">
-              <p class="text-center text-black text-sm lg:text-base font-semibold">N'da Adams Aimé-Désiré Anicet</p>
+              <p class="text-center text-black text-sm lg:text-base font-semibold">{{ userName }}</p>
             </router-link>
-            <p class="text-center text-gray-400 text-sm lg:text-base font-medium">+225 0778812111</p>
+            <p class="text-center text-gray-400 text-sm lg:text-base font-medium">{{ indicatif }} {{ phone }}</p>
           </div>
         </div>
         <div class="px-4 mt-14 relative">
@@ -50,9 +50,12 @@
         </div>
         <div class="absolute w-full bottom-5 px-4 flex items-center justify-center">
           <div
-            class="w-full bg-black text-white shadow-lg rounded-md px-6 h-10 flex items-center justify-center gap-x-2 mt-3 cursor-pointer">
-            <vue-feather size="20" stroke-width="2.1" type="log-out"></vue-feather>
-            <p class="text-sm font-semibold">Déconnexion</p>
+            class="w-full bg-black text-white shadow-lg rounded-md px-6 h-10 flex items-center justify-center gap-x-2 mt-3 cursor-pointer"
+            @click="deconnexion">
+            <ProgressSpinner v-if="isLoggingOut" style="width:25px;height:25px" strokeWidth="5" fill="none"
+              animationDuration=".5s" aria-label="Custom ProgressSpinner" />
+            <vue-feather v-if="!isLoggingOut" size="20" stroke-width="2.1" type="log-out"></vue-feather>
+            <p v-if="!isLoggingOut" class="text-sm font-semibold">Déconnexion</p>
           </div>
         </div>
       </aside>
@@ -70,9 +73,9 @@
             </router-link>
             <div class="mt-3 px-4">
               <router-link to="/parametres/compte">
-                <p class="text-center text-black text-sm lg:text-base font-semibold">N'da Adams Aimé-Désiré Anicet</p>
+                <p class="text-center text-black text-sm lg:text-base font-semibold">{{ userName }}</p>
               </router-link>
-              <p class="text-center text-gray-400 text-sm lg:text-base font-medium">+225 0778812111</p>
+              <p class="text-center text-gray-400 text-sm lg:text-base font-medium">{{ indicatif }} {{ phone }}</p>
             </div>
           </div>
           <div class="px-4 mt-10 relative h-96">
@@ -107,9 +110,12 @@
           </div>
           <div class="absolute w-full bottom-5 px-4 flex items-center justify-center">
             <div
-              class="w-full bg-black text-white shadow-lg rounded-md px-6 h-11 flex items-center justify-center gap-x-2 mt-3 cursor-pointer">
-              <vue-feather size="20" stroke-width="2.1" type="log-out"></vue-feather>
-              <p class="text-sm font-semibold">Déconnexion</p>
+              class="w-full bg-black text-white shadow-lg rounded-md px-6 h-11 flex items-center justify-center gap-x-2 mt-3 cursor-pointer"
+              @click="deconnexion">
+              <ProgressSpinner v-if="isLoggingOut" style="width:25px;height:25px" strokeWidth="5" fill="none"
+                animationDuration=".5s" aria-label="Custom ProgressSpinner" />
+              <vue-feather v-if="!isLoggingOut" size="20" stroke-width="2.1" type="log-out"></vue-feather>
+              <p v-if="!isLoggingOut" class="text-sm font-semibold">Déconnexion</p>
             </div>
           </div>
         </aside>
@@ -136,13 +142,52 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
+import { useRouter } from 'vue-router';
+import ProgressSpinner from 'primevue/progressspinner';
 import Sidebar from 'primevue/sidebar/sfc';
+import { logout } from './../services/auth/AuthRequest'
+
+const router = useRouter()
 
 const visibleLeft = ref(false);
+const isLoggingOut = ref(false)
+const errorMessage = ref("")
+const userName = ref("")
+const indicatif = ref("")
+const phone = ref("")
+
+onMounted(() => {
+  userName.value = localStorage.getItem('fullname')
+  indicatif.value = localStorage.getItem('indicatif')
+  phone.value = localStorage.getItem('phone')
+})
+
+const deconnexion = () => {
+  try {
+    isLoggingOut.value = true
+
+    logout().then((res) => {
+      isLoggingOut.value = false
+      localStorage.clear()
+      router.push({ path: 'connexion', replace: true })
+    }).catch(err => {
+      console.log(err)
+      if (err.code === "ERR_NETWORK") {
+        errorMessage.value = "Vérifiez votre connexion internet et rééssayez !"
+      } else {
+        errorMessage.value = err.response.data.message
+      }
+      isLoggingOut.value = false
+    })
+  } catch (error) {
+    isLoggingOut.value = false
+    console.log('err catch', error)
+  }
+}
 </script>
 
-<style>
+<style scoped>
 .parent {
   display: grid;
   grid-template-columns: repeat(11, 1fr);
@@ -212,5 +257,26 @@ const visibleLeft = ref(false);
 
 .cellchap-active-link div p {
   font-weight: 700 !important;
+}
+
+@keyframes p-progress-spinner-color {
+
+  100%,
+  0% {
+    stroke: #fff;
+  }
+
+  40% {
+    stroke: #fff;
+  }
+
+  66% {
+    stroke: #fff;
+  }
+
+  80%,
+  90% {
+    stroke: #fff;
+  }
 }
 </style>

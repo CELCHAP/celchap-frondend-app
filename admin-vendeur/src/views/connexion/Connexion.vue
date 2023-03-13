@@ -79,13 +79,21 @@ const loginUser = () => {
       localStorage.setItem("access", res.data.access_token)
       if (!res.data.user.boutique_id) {
         router.push({ path:'nouvelle-boutique', replace: true })
+        localStorage.setItem('fullname', res.data.user.fullname)
+        localStorage.setItem('indicatif', res.data.user.indicatif)
+        localStorage.setItem('phone', res.data.user.phone)
       } else {
+        localStorage.setItem('category', res.data.user.boutique_id)
+        localStorage.setItem('store', res.data.user.boutique_id)
+        localStorage.setItem('fullname', res.data.user.fullname)
+        localStorage.setItem('indicatif', res.data.user.indicatif)
+        localStorage.setItem('phone', res.data.user.phone)
         router.push({ path: 'dashboard' })
       }
     }).catch(err => {
       console.log(err)
       if (err.code === "ERR_NETWORK") {
-        errorMessage.value = "Vérifiez votre connexion internet et rééssayez"
+        errorMessage.value = "Vérifiez votre connexion internet et rééssayez !"
       } else {
         errorMessage.value = err.response.data.message
       }
@@ -103,20 +111,20 @@ const loginUser = () => {
 
   100%,
   0% {
-    stroke: #fff !important;
+    stroke: #fff;
   }
 
   40% {
-    stroke: #fff !important;
+    stroke: #fff;
   }
 
   66% {
-    stroke: #fff !important;
+    stroke: #fff;
   }
 
   80%,
   90% {
-    stroke: #fff !important;
+    stroke: #fff;
   }
 }
 </style>

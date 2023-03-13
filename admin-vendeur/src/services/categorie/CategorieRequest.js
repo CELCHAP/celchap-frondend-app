@@ -13,5 +13,5 @@ axios.interceptors.request.use(function (config) {
 });
 
 export const getCategories = async () => {
-  return await axios.get(BASE_URL("categorie/api/index"), {});
+  return await axios.get(BASE_URL("api/categorie/index"), {});
 };

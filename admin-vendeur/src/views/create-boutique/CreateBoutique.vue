@@ -25,9 +25,7 @@
               </label>
               <select class="select select-bordered font-medium rounded-md" v-model="fields.category">
                 <option value="" disabled selected>Choisir une catégorie</option>
-                <option value="+225">+225 (Côte d'Ivoire)</option>
-                <option value="+237">+237 (Cameroun)</option>
-                <option value="+241">+241 (Gabon)</option>
+                <option v-for="(item, index) in listeCategorie" :key="index" :value="item.id">{{ item.name }}</option>
               </select>
             </div>
             <div class="form-control w-full">
@@ -73,12 +71,12 @@
 
 
             <div class="mt-6 mb-1">
-              <button :disabled="isLogging"
+              <button :disabled="isLoading"
                 class="bg-black text-white font-extrabold w-full h-11 rounded-md shadow-md flex items-center justify-center"
-                @click="createAccount">
-                <ProgressSpinner v-if="isLogging" style="width:25px;height:25px" strokeWidth="5" fill="none"
+                @click="createNewStore">
+                <ProgressSpinner v-if="isLoading" style="width:25px;height:25px" strokeWidth="5" fill="none"
                   animationDuration=".5s" aria-label="Custom ProgressSpinner" />
-                <span v-if="!isLogging">Démarrer</span>
+                <span v-if="!isLoading">Démarrer</span>
               </button>
             </div>
             <div v-if="errorMessage" class="mt-3">
@@ -95,40 +93,44 @@
 import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import ProgressSpinner from 'primevue/progressspinner';
-import { signUp } from '../../services/auth/AuthRequest'
 import { getUserAndStoreConnected } from '../../services/utilisateur/UtilisateurRequest'
 import { getCategories } from '../../services/categorie/CategorieRequest'
+import { createNewUserStore } from '../../services/boutique/BoutiqueRequest';
 
 const router = useRouter()
 
-const isLogging = ref(false)
+const isLoading = ref(false)
 const errorMessage = ref("")
 const userInfo = ref(null)
+const listeCategorie = ref([])
 
 const fields = ref({
   name: '',
   indicatif: '',
   phone: '',
-  devise: '',
+  devise: 'FCFA',
   description: '',
   category: '',
   image: ''
 })
 
-// Vérifie si l'utilisateur à déjà une boutique
-// Si 'OUI' redirige vers le dashboard
-// Si 'NON' crée la boutique
 onMounted(() => {
-  getUserAndStoreConnected().then(res => {
-    userInfo.value = res.data.auth[0]
+  // Vérifie si l'utilisateur à déjà une boutique
+  // Si 'OUI' redirige vers le dashboard
+  // Si 'NON' crée la boutique
+  if (localStorage.getItem('store')) {
+    router.push({ path: 'dashboard', replace: true })
+  } else {
+    getUserAndStoreConnected().then(res => {
+      userInfo.value = res.data.auth[0]
+      if (userInfo.value.boutique_id !== null && userInfo.value.boutiques.length > 0) {
+        router.push({ path: 'dashboard', replace: true })
+      }
+    }).catch(err => console.log(err))
+  }
 
-    if (userInfo.value.boutique_id !== null) {
-      router.push({ path: 'dashboard', replace: true })
-    }
-  }).catch(err => console.log(err))
-  
   getCategories().then(res => {
-    console.log('c', res.data)
+    listeCategorie.value = res.data.categorie
 
   }).catch(err => console.log(err))
 })
@@ -147,24 +149,28 @@ const filePreview = (file) => {
   return file ? URL.createObjectURL(file) : ""
 }
 
-const createAccount = () => {
-  isLogging.value = true
+const createNewStore = () => {
+  isLoading.value = true
+  errorMessage.value = ""
 
   try {
-    signUp(fields.value).then((res) => {
-      console.log(res)
-      isLogging.value = false
-      localStorage.setItem("access", res.data.access_token)
+    createNewUserStore(fields.value).then((res) => {
+      isLoading.value = false
+      router.push({ path: 'dashboard', replace: true })
+      localStorage.setItem('category', res.data.boutique.category_id)
+      localStorage.setItem('store', res.data.boutique.id)
     }).catch(err => {
       console.log(err)
       if (err.code === "ERR_NETWORK") {
         errorMessage.value = "Vérifiez votre connexion internet et rééssayez"
+      } else {
+        errorMessage.value = err.response.data.message
       }
-      isLogging.value = false
+      isLoading.value = false
     })
   } catch (error) {
     console.log('catch error', err)
-    isLogging.value = false
+    isLoading.value = false
   }
 }
 </script>
