@@ -83,7 +83,6 @@ const loginUser = () => {
         localStorage.setItem('indicatif', res.data.user.indicatif)
         localStorage.setItem('phone', res.data.user.phone)
       } else {
-        localStorage.setItem('category', res.data.user.boutique_id)
         localStorage.setItem('store', res.data.user.boutique_id)
         localStorage.setItem('fullname', res.data.user.fullname)
         localStorage.setItem('indicatif', res.data.user.indicatif)

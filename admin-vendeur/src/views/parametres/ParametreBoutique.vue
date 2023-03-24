@@ -9,14 +9,15 @@
         </div>
         <div>
           <p class="text-xs sm:text-sm text-gray-400 font-medium">Nom de la boutique:</p>
-          <h2 class="text-xl sm:text-2xl md:text-3xl text-orange-500 font-black">Naham Tech & Compagnie</h2>
+          <h2 class="text-xl sm:text-2xl md:text-3xl text-orange-500 font-black">{{ boutiqueDetail.name }}</h2>
           <p class="text-xs sm:text-sm text-gray-400 font-medium mt-3">Date de création:</p>
-          <h2 class="text-sm sm:text-base text-gray-800 font-bold">12/03/2023</h2>
+          <h2 class="text-sm sm:text-base text-gray-800 font-bold">{{ formatDate(boutiqueDetail.created_at) }}</h2>
         </div>
       </div>
       <div class="mt-5 w-full sm:w-fit">
         <button
-          class="bg-black text-sm text-custom-jaune font-bold w-full sm:w-fit h-fit py-1.5 px-3 shadow-lg rounded-md" @click="openModalEditBoutique">
+          class="bg-black text-sm text-custom-jaune font-bold w-full sm:w-fit h-fit py-1.5 px-3 shadow-lg rounded-md"
+          @click="openModalEditBoutique">
           Modifier les informations
         </button>
       </div>
@@ -31,13 +32,11 @@
         <p class="text-base text-gray-500 font-bold">Catégorie de la boutique : <span
             class="font-bold text-xs text-black bg-custom-jaune py-1 px-1.5 rounded-md">Appareil informatique</span></p>
         <p class="text-base text-gray-500 font-bold mt-4">Contact de la boutique : <span
-            class="font-bold text-xs text-black bg-green-200 py-1 px-1.5 rounded-md">+225 0778812111</span></p>
+            class="font-bold text-xs text-black bg-green-200 py-1 px-1.5 rounded-md">{{ boutiqueDetail.indicatif }} {{
+              boutiqueDetail.phone }}</span></p>
         <p class="text-base text-gray-500 font-bold mt-4">
           Description de la boutique : <span class="font-medium text-black">
-            Lorem ipsum
-            dolor sit amet consectetur, adipisicing elit. Repellendus
-            praesentium animi ipsa reprehenderit commodi rem! Iure quidem, modi libero, adipisci perferendis cum
-            praesentium necessitatibus illo molestias provident suscipit aperiam. Ut?
+            {{ boutiqueDetail.description }}
           </span>
         </p>
         <p class="text-base text-gray-500 font-bold mt-4">
@@ -70,7 +69,7 @@
       <div class="modal-box w-11/12 max-w-xl">
         <h3 class="font-extrabold text-xl text-custom-orange">Modifier les informations</h3>
         <div class="modal-ajout-article mt-5">
-          <EditBoutique :boutiqueInfo="boutiqueDetail" />
+          <EditBoutique :boutiqueInfo="boutiqueDetail" :categorie="listeCategorie" />
         </div>
       </div>
     </div>
@@ -78,10 +77,52 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import EditBoutique from './EditBoutique.vue';
+import { getCategories } from '../../services/categorie/CategorieRequest';
+import { listUserStore } from '../../services/boutique/boutiqueRequest'
 
 const boutiqueDetail = ref({})
+const listeCategorie = ref([])
+
+onMounted(() => {
+  // Récupère des infos de la boutique
+  listUserStore().then(res => {
+    boutiqueDetail.value = res.data.boutique[0]
+  }).catch(err => {
+    snackbar.add({
+      type: 'error',
+      text: 'Impossible de récupérer les informations',
+      dismissible: true,
+      background: "#ef4444"
+    })
+  })
+
+
+  // Récupère la liste des catégories
+  getCategories().then(res => {
+    listeCategorie.value = res.data.categorie
+  }).catch(err => {
+    snackbar.add({
+      type: 'error',
+      text: 'Impossible de récupérer les catégories',
+      dismissible: true,
+      background: "#ef4444"
+    })
+  })
+})
+
+const formatDate = (dateString) => {
+  const date = new Date(dateString)
+  const options = {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric'
+  }
+  return date.toLocaleDateString('fr-FR', options)
+}
 
 const openModalEditBoutique = (item) => {
   document.getElementById('edit-boutique').click()

@@ -124,6 +124,7 @@ onMounted(() => {
     getUserAndStoreConnected().then(res => {
       userInfo.value = res.data.auth[0]
       if (userInfo.value.boutique_id !== null && userInfo.value.boutiques.length > 0) {
+        localStorage.setItem('store', res.data.user.boutique_id)
         router.push({ path: 'dashboard', replace: true })
       }
     }).catch(err => console.log(err))

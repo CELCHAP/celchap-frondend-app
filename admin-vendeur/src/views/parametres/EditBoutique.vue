@@ -20,7 +20,8 @@
           <label class="label">
             <span class="label-text text-sm sm:text-base font-semibold">Nom de la boutique</span>
           </label>
-          <input type="text" placeholder="My little market" class="input input-bordered w-full font-medium rounded-md" />
+          <input type="text" placeholder="My little market" class="input input-bordered w-full font-medium rounded-md"
+            v-model="boutiqueFields.nom" />
         </div>
 
         <div class="form-control w-full mt-2">
@@ -29,8 +30,7 @@
           </label>
           <select class="select select-bordered font-medium rounded-md">
             <option value="" disabled selected>Choisir une catégorie</option>
-            <option>Han Solo</option>
-            <option>Greedo</option>
+            <option v-for="(item, index) in listeCategorie" :key="index">{{ item.name }}</option>
           </select>
         </div>
       </div>
@@ -39,7 +39,20 @@
         <label class="label">
           <span class="label-text text-sm sm:text-base font-semibold">Contact de la boutique</span>
         </label>
-        <input type="text" placeholder="0778812111" class="input input-bordered w-full font-medium rounded-md" />
+        <div class="flex items-center gap-x-4">
+          <div class="w-44">
+            <select class="w-44 select select-bordered font-medium rounded-md">
+              <option value="" disabled selected>Choisir un indicatif</option>
+              <option value="+225">+225</option>
+              <option value="+241">+241</option>
+              <option value="+226">+226</option>
+            </select>
+          </div>
+          <div class="w-full">
+            <input type="text" placeholder="0778812111" class="input input-bordered w-full font-medium rounded-md"
+              v-model="boutiqueFields.phone" />
+          </div>
+        </div>
       </div>
 
       <div class="form-control w-full mt-2">
@@ -47,10 +60,11 @@
           <span class="label-text text-sm sm:text-base font-semibold">Description de la boutique</span>
         </label>
         <textarea type="text" placeholder="0778812111"
-          class="h-32 input input-bordered w-full font-medium rounded-md py-3"></textarea>
+          class="h-32 input input-bordered w-full font-medium rounded-md py-3"
+          v-model="boutiqueFields.description"></textarea>
       </div>
 
-      <div class="form-control w-full mt-2">
+      <!-- <div class="form-control w-full mt-2">
         <label class="label">
           <span class="label-text text-sm sm:text-base font-semibold">Lien des réseaux sociaux</span>
         </label>
@@ -72,7 +86,7 @@
           </div>
           <input type="text" placeholder="http://twitter.com/dams9ix" class="input input-bordered w-full font-medium rounded-md" />
         </div>
-      </div>
+      </div> -->
     </div>
 
     <div class="column-action modal-action pt-5">
@@ -97,17 +111,20 @@ import ProgressSpinner from 'primevue/progressspinner';
 
 const props = defineProps({
   boutiqueInfo: Object,
+  categorie: Array,
 });
 
-const { boutiqueInfo } = toRefs(props)
+const { boutiqueInfo, categorie } = toRefs(props)
 
 const isLoadingUpdate = ref(false)
 const file = ref("")
+const listeCategorie = ref("")
 const boutiqueFields = ref({
   nom: '',
   categorie: '',
   description: '',
-  contact: '',
+  indicatif: '',
+  phone: '',
   photo: '',
   lienFacebook: '',
   lienInstagram: '',
@@ -115,7 +132,11 @@ const boutiqueFields = ref({
 })
 
 watch(boutiqueInfo, () => {
-
+  listeCategorie.value = categorie.value
+  boutiqueFields.value.nom = boutiqueInfo.value.name,
+    boutiqueFields.value.description = boutiqueInfo.value.description,
+    boutiqueFields.value.indicatif = boutiqueInfo.value.indicatif,
+    boutiqueFields.value.phone = boutiqueInfo.value.phone
 })
 
 const choosefile = () => {

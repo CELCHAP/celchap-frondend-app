@@ -141,7 +141,10 @@ const createAccount = () => {
     signUp(fields.value).then((res) => {
       isLogging.value = false
       localStorage.setItem("access", res.data.access_token)
-      router.push({ path:'nouvelle-boutique', replace: true })
+      router.push({ path: 'nouvelle-boutique', replace: true })
+      localStorage.setItem('fullname', res.data.user.fullname)
+      localStorage.setItem('indicatif', res.data.user.indicatif)
+      localStorage.setItem('phone', res.data.user.phone)
     }).catch(err => {
       console.log(err)
       if (err.code === "ERR_NETWORK") {

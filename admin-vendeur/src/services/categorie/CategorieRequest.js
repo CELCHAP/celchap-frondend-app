@@ -15,3 +15,7 @@ axios.interceptors.request.use(function (config) {
 export const getCategories = async () => {
   return await axios.get(BASE_URL("api/categorie/index"), {});
 };
+
+export const getSousCategories = async () => {
+  return await axios.get(BASE_URL("api/sous_categorie/index"), {});
+};

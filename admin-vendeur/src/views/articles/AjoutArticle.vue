@@ -1,22 +1,33 @@
 <template>
   <div>
+    <div class="form-control w-full">
+      <label class="label">
+        <span class="label-text text-sm sm:text-base font-semibold">Nom</span>
+      </label>
+      <input type="text" placeholder="Sac à main GUCCI" class="input input-bordered w-full font-medium rounded-md"
+        v-model="articleDataField.name" />
+    </div>
 
     <div class="column flex items-center gap-x-4">
       <div class="form-control w-full">
         <label class="label">
-          <span class="label-text text-sm sm:text-base font-semibold">Nom</span>
+          <span class="label-text text-sm sm:text-base font-semibold">Catégorie</span>
         </label>
-        <input type="text" placeholder="Sac à main GUCCI" class="input input-bordered w-full font-medium rounded-md"
-          v-model="articleDataField.title" />
+        <select class="select select-bordered font-medium rounded-md" v-model="articleDataField.category"
+          @change="() => updateListeSousCategorie(articleDataField.category)">
+          <option value="" disabled selected>Choisir une catégorie</option>
+          <option :value="item.id" v-for="(item, index) in listeCategorie" :key="index">{{ item.name }}</option>
+        </select>
       </div>
       <div class="form-control w-full">
         <label class="label">
-          <span class="label-text text-sm sm:text-base font-semibold">Catégorie</span>
+          <span class="label-text text-sm sm:text-base font-semibold">Sous-catégorie</span>
         </label>
-        <select class="select select-bordered font-medium rounded-md" v-model="articleDataField.category">
-          <option value="" disabled selected>Choisir une catégorie</option>
-          <option>Han Solo</option>
-          <option>Greedo</option>
+        <select :disabled="articleDataField.category === ''" class="select select-bordered font-medium rounded-md"
+          v-model="articleDataField.sous_category">
+          <option value="" disabled selected>Choisir une sous-catégorie</option>
+          <option :value="item.id" v-for="(item, index) in listeSousCategorieParCategorie" :key="index">{{ item.name }}
+          </option>
         </select>
       </div>
     </div>
@@ -68,27 +79,20 @@
     <div class="column flex items-center gap-x-4 mt-2">
       <div class="form-control w-full">
         <label class="label">
-          <span class="label-text text-sm sm:text-base font-semibold">Prix normal (FCFA)</span>
+          <span class="label-text text-sm sm:text-base font-semibold">Prix de vente (FCFA)</span>
         </label>
         <input type="text" placeholder="45000" class="input input-bordered w-full font-medium rounded-md"
-          v-model="articleDataField.prix" />
+          v-model="articleDataField.prix_vendeur" />
       </div>
       <div class="form-control w-full">
         <label class="label">
-          <span class="label-text text-sm sm:text-base font-semibold">Prix en promo (FCFA)</span>
+          <span class="label-text text-sm sm:text-base font-semibold">Disponibilité</span>
         </label>
-        <input type="text" placeholder="34000" class="input input-bordered w-full font-medium rounded-md"
-          v-model="articleDataField.prix_promo" />
-      </div>
-    </div>
-
-    <div class="mt-2">
-      <div class="form-control w-full">
-        <label class="label">
-          <span class="label-text text-sm sm:text-base font-semibold">Quantité en stock</span>
-        </label>
-        <input type="text" placeholder="6" class="input input-bordered w-full font-medium rounded-md"
-          v-model="articleDataField.quantiteStock" />
+        <select class="select select-bordered font-medium rounded-md" v-model="articleDataField.disponibilite">
+          <option value="" disabled selected>Choisir une disponibilité</option>
+          <option value="DISPONIBLE">Disponible</option>
+          <option value="INDISPONIBLE">Indisponible</option>
+        </select>
       </div>
     </div>
 
@@ -119,33 +123,39 @@
     </div>
 
     <div class="column-action modal-action pt-5">
-
-      <button :disabled="isLoadingDelete"
+      <button :disabled="isLoading"
         class="bg-neutral-800 w-1/2 h-10 flex items-center justify-center rounded-md text-sm sm:text-base text-white font-bold"
         @click="closeModal">Annuler</button>
 
-      <button :disabled="isLoadingDelete"
+      <button :disabled="isLoading"
         class="custom-btn bg-custom-orange w-1/2 h-10 flex items-center justify-center rounded-md font-bold text-sm sm:text-base text-white"
         @click="saveArticle">
-        <ProgressSpinner v-if="isLoadingDelete" style="width:25px;height:25px" strokeWidth="5" fill="none"
+        <ProgressSpinner v-if="isLoading" style="width:25px;height:25px" strokeWidth="5" fill="none"
           animationDuration=".5s" aria-label="Custom ProgressSpinner" />
-        <span v-if="!isLoadingDelete">{{ article_Detail.nom ? 'Modifier' : 'Enregistrer'}}</span>
+        <span v-if="!isLoading">{{ article_Detail.nom ? 'Modifier' : 'Enregistrer' }}</span>
       </button>
     </div>
   </div>
 </template>
 
 <script setup>
-import { watch, ref, toRefs } from 'vue';
+import { watch, ref, toRefs, defineEmits } from 'vue';
 import { useEditor, EditorContent } from '@tiptap/vue-3'
 import ProgressSpinner from 'primevue/progressspinner';
 import StarterKit from '@tiptap/starter-kit'
+import { useSnackbar } from "vue3-snackbar";
+import { saveNewArticle } from '../../services/article/ArticleRequest';
+
+const snackbar = useSnackbar();
 
 const props = defineProps({
   article_Detail: Object,
+  categorie: Object,
+  sousCategorie: Object,
 });
 
-const { article_Detail } = toRefs(props)
+const { article_Detail, categorie, sousCategorie } = toRefs(props)
+const emit = defineEmits(['reloadEvent']);
 
 const editor = useEditor({
   content: '<p>Tapez une description ici</p><br>',
@@ -159,23 +169,41 @@ const editor = useEditor({
   ],
 })
 
-const isLoadingDelete = ref(false)
+const isLoading = ref(false)
+const errorMessage = ref("")
 const files = ref([])
+const listeCategorie = ref([])
+const listeSousCategorie = ref([])
+const listeSousCategorieParCategorie = ref([])
 const articleDataField = ref({
-  title: '',
+  name: '',
   category: '',
+  sous_category: '',
   description: '',
-  prix: '',
-  prix_promo: '',
-  stock: '',
-  images: []
+  prix_vendeur: '',
+  disponibilite: '',
+  image: []
 })
 
 watch(article_Detail, () => {
-  articleDataField.value.title = article_Detail.value.nom
-  articleDataField.value.prix = article_Detail.value.prix
-  articleDataField.value.prix_promo = article_Detail.value.prix_promo
+  listeCategorie.value = categorie.value
+  listeSousCategorie.value = sousCategorie.value
+  articleDataField.value.name = article_Detail.value.name
+  articleDataField.value.prix_vendeur = article_Detail.value.prix_vendeur
+  articleDataField.value.category = article_Detail.value.category
+  articleDataField.value.sous_category = article_Detail.value.sous_category
+  articleDataField.value.description = article_Detail.value.description
+  articleDataField.value.disponibilite = article_Detail.value.disponibilite
 })
+
+const updateListeSousCategorie = (categorieId) => {
+  listeSousCategorieParCategorie.value = []
+  listeSousCategorie.value.forEach(element => {
+    if (element.category_id === categorieId) {
+      listeSousCategorieParCategorie.value.push(element)
+    }
+  });
+}
 
 const choosefile = () => {
   document.getElementById('file-input-btn').click()
@@ -184,6 +212,7 @@ const choosefile = () => {
 const onFileChange = (e) => {
   if (e.target.files[0] && !files.value.includes(e.target.files[0])) {
     files.value.push(e.target.files[0])
+    articleDataField.value.image.push(e.target.files[0])
   }
 }
 
@@ -197,18 +226,60 @@ const filePreview = (file) => {
   return URL.createObjectURL(file)
 }
 
-const closeModal = () => {
+function closeModal() {
   document.getElementById('edit-article').click()
 }
 
 const saveArticle = () => {
-  isLoadingDelete.value = true
-  console.log('articles', articleDataField.value)
-  
-  setTimeout(() => {
-    isLoadingDelete.value = false
-    console.log('FILES', files.value)
-  }, 3000);
+  isLoading.value = true
+
+  try {
+    saveNewArticle(articleDataField.value).then((res) => {
+      isLoading.value = false
+      emit('reloadEvent', 'Hello from child component');
+      closeModal()
+      articleDataField.value = {
+        name: '',
+        category: '',
+        sous_category: '',
+        description: '',
+        prix_vendeur: '',
+        disponibilite: '',
+        image: []
+      }
+      files.value = []
+      listeSousCategorieParCategorie.value = []
+      snackbar.add({
+        type: 'error',
+        text: "Article enregistré avec succès",
+        dismissible: true,
+        background: "#10b981"
+      })
+    }).catch(err => {
+      console.log(err)
+      if (err.code === "ERR_NETWORK") {
+        errorMessage.value = "Vérifiez votre connexion internet et rééssayez"
+      } else {
+        errorMessage.value = err.response.data.message
+      }
+      isLoading.value = false
+      snackbar.add({
+        type: 'error',
+        text: errorMessage.value,
+        dismissible: true,
+        background: "#ef4444"
+      })
+    })
+  } catch (error) {
+    console.log('catch error', err)
+    isLoading.value = false
+    snackbar.add({
+      type: 'error',
+      text: "Une erreur s'est produite",
+      dismissible: true,
+      background: "#ef4444"
+    })
+  }
 }
 </script>
 
