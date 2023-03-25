@@ -137,6 +137,12 @@ const filePreview = (file) => {
 const createAccount = () => {
   isLogging.value = true
 
+  const formData = new FormData();
+
+  for (const key in fields.value) {
+    formData.append(key, fields.value[key]);
+  }
+
   try {
     signUp(fields.value).then((res) => {
       isLogging.value = false

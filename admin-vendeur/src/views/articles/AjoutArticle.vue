@@ -23,8 +23,8 @@
         <label class="label">
           <span class="label-text text-sm sm:text-base font-semibold">Sous-catégorie</span>
         </label>
-        <select :disabled="articleDataField.category === ''" class="select select-bordered font-medium rounded-md"
-          v-model="articleDataField.sous_category">
+        <select :disabled="articleDataField.category === '' || articleDataField.category === undefined"
+          class="select select-bordered font-medium rounded-md" v-model="articleDataField.sous_category">
           <option value="" disabled selected>Choisir une sous-catégorie</option>
           <option :value="item.id" v-for="(item, index) in listeSousCategorieParCategorie" :key="index">{{ item.name }}
           </option>
@@ -127,24 +127,31 @@
         class="bg-neutral-800 w-1/2 h-10 flex items-center justify-center rounded-md text-sm sm:text-base text-white font-bold"
         @click="closeModal">Annuler</button>
 
-      <button :disabled="isLoading"
+      <button v-if="!article_Detail.name" :disabled="isLoading"
         class="custom-btn bg-custom-orange w-1/2 h-10 flex items-center justify-center rounded-md font-bold text-sm sm:text-base text-white"
         @click="saveArticle">
         <ProgressSpinner v-if="isLoading" style="width:25px;height:25px" strokeWidth="5" fill="none"
           animationDuration=".5s" aria-label="Custom ProgressSpinner" />
-        <span v-if="!isLoading">{{ article_Detail.nom ? 'Modifier' : 'Enregistrer' }}</span>
+        <span v-if="!isLoading">Enregistrer</span>
+      </button>
+      <button v-if="article_Detail.name" :disabled="isLoading"
+        class="custom-btn bg-custom-orange w-1/2 h-10 flex items-center justify-center rounded-md font-bold text-sm sm:text-base text-white"
+        @click="modifierArticle">
+        <ProgressSpinner v-if="isLoading" style="width:25px;height:25px" strokeWidth="5" fill="none"
+          animationDuration=".5s" aria-label="Custom ProgressSpinner" />
+        <span v-if="!isLoading">Modifier</span>
       </button>
     </div>
   </div>
 </template>
 
 <script setup>
-import { watch, ref, toRefs, defineEmits } from 'vue';
+import { watch, ref, toRefs, defineEmits, onMounted } from 'vue';
 import { useEditor, EditorContent } from '@tiptap/vue-3'
 import ProgressSpinner from 'primevue/progressspinner';
 import StarterKit from '@tiptap/starter-kit'
 import { useSnackbar } from "vue3-snackbar";
-import { saveNewArticle } from '../../services/article/ArticleRequest';
+import { saveNewArticle, updateArticle } from '../../services/article/ArticleRequest';
 
 const snackbar = useSnackbar();
 
@@ -156,6 +163,23 @@ const props = defineProps({
 
 const { article_Detail, categorie, sousCategorie } = toRefs(props)
 const emit = defineEmits(['reloadEvent']);
+
+const isLoading = ref(false)
+const errorMessage = ref("")
+const files = ref([])
+const listeCategorie = ref([])
+const listeSousCategorie = ref([])
+const listeSousCategorieParCategorie = ref([])
+const articleDataField = ref({
+  id: '',
+  name: '',
+  category: '',
+  sous_category: '',
+  description: '',
+  prix_vendeur: '',
+  disponibilite: '',
+  image: []
+})
 
 const editor = useEditor({
   content: '<p>Tapez une description ici</p><br>',
@@ -169,29 +193,18 @@ const editor = useEditor({
   ],
 })
 
-const isLoading = ref(false)
-const errorMessage = ref("")
-const files = ref([])
-const listeCategorie = ref([])
-const listeSousCategorie = ref([])
-const listeSousCategorieParCategorie = ref([])
-const articleDataField = ref({
-  name: '',
-  category: '',
-  sous_category: '',
-  description: '',
-  prix_vendeur: '',
-  disponibilite: '',
-  image: []
-})
-
 watch(article_Detail, () => {
+  if (article_Detail.value.name !== undefined) {
+    updateListeSousCategorie(article_Detail.value.category_id)
+    editor.value.content = article_Detail.value.description
+  }
   listeCategorie.value = categorie.value
   listeSousCategorie.value = sousCategorie.value
+  articleDataField.value.id = article_Detail.value.id
   articleDataField.value.name = article_Detail.value.name
   articleDataField.value.prix_vendeur = article_Detail.value.prix_vendeur
-  articleDataField.value.category = article_Detail.value.category
-  articleDataField.value.sous_category = article_Detail.value.sous_category
+  articleDataField.value.category = article_Detail.value.category_id
+  articleDataField.value.sous_category = article_Detail.value.sous_category_id
   articleDataField.value.description = article_Detail.value.description
   articleDataField.value.disponibilite = article_Detail.value.disponibilite
 })
@@ -233,8 +246,14 @@ function closeModal() {
 const saveArticle = () => {
   isLoading.value = true
 
+  const formData = new FormData();
+
+  for (const key in articleDataField.value) {
+    formData.append(key, articleDataField.value[key]);
+  }
+
   try {
-    saveNewArticle(articleDataField.value).then((res) => {
+    saveNewArticle(formData).then((res) => {
       isLoading.value = false
       emit('reloadEvent', 'Hello from child component');
       closeModal()
@@ -252,6 +271,60 @@ const saveArticle = () => {
       snackbar.add({
         type: 'error',
         text: "Article enregistré avec succès",
+        dismissible: true,
+        background: "#10b981"
+      })
+    }).catch(err => {
+      console.log(err)
+      if (err.code === "ERR_NETWORK") {
+        errorMessage.value = "Vérifiez votre connexion internet et rééssayez"
+      } else {
+        errorMessage.value = err.response.data.message
+      }
+      isLoading.value = false
+      snackbar.add({
+        type: 'error',
+        text: errorMessage.value,
+        dismissible: true,
+        background: "#ef4444"
+      })
+    })
+  } catch (error) {
+    console.log('catch error', err)
+    isLoading.value = false
+    snackbar.add({
+      type: 'error',
+      text: "Une erreur s'est produite",
+      dismissible: true,
+      background: "#ef4444"
+    })
+  }
+}
+
+
+const modifierArticle = () => {
+  isLoading.value = true
+
+  try {
+    updateArticle(articleDataField.value).then((res) => {
+      isLoading.value = false
+      emit('reloadEvent', 'Hello from child component');
+      closeModal()
+      articleDataField.value = {
+        id: "",
+        name: '',
+        category: '',
+        sous_category: '',
+        description: '',
+        prix_vendeur: '',
+        disponibilite: '',
+        image: []
+      }
+      files.value = []
+      listeSousCategorieParCategorie.value = []
+      snackbar.add({
+        type: 'error',
+        text: "Article modifié avec succès",
         dismissible: true,
         background: "#10b981"
       })

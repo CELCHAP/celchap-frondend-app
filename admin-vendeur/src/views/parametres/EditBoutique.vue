@@ -21,16 +21,16 @@
             <span class="label-text text-sm sm:text-base font-semibold">Nom de la boutique</span>
           </label>
           <input type="text" placeholder="My little market" class="input input-bordered w-full font-medium rounded-md"
-            v-model="boutiqueFields.nom" />
+            v-model="boutiqueFields.name" />
         </div>
 
         <div class="form-control w-full mt-2">
           <label class="label">
             <span class="label-text text-sm sm:text-base font-semibold">Catégorie de la boutique</span>
           </label>
-          <select class="select select-bordered font-medium rounded-md">
+          <select class="select select-bordered font-medium rounded-md" v-model="boutiqueFields.category">
             <option value="" disabled selected>Choisir une catégorie</option>
-            <option v-for="(item, index) in listeCategorie" :key="index">{{ item.name }}</option>
+            <option v-for="(item, index) in listeCategorie" :key="index" :value="item.id">{{ item.name }}</option>
           </select>
         </div>
       </div>
@@ -41,7 +41,7 @@
         </label>
         <div class="flex items-center gap-x-4">
           <div class="w-44">
-            <select class="w-44 select select-bordered font-medium rounded-md">
+            <select class="w-44 select select-bordered font-medium rounded-md" v-model="boutiqueFields.indicatif">
               <option value="" disabled selected>Choisir un indicatif</option>
               <option value="+225">+225</option>
               <option value="+241">+241</option>
@@ -106,8 +106,12 @@
 </template>
 
 <script setup>
-import { watch, ref, toRefs } from 'vue';
+import { watch, ref, toRefs, defineEmits } from 'vue';
 import ProgressSpinner from 'primevue/progressspinner';
+import { useSnackbar } from "vue3-snackbar";
+import { updateUserStore } from '../../services/boutique/boutiqueRequest'
+
+const snackbar = useSnackbar();
 
 const props = defineProps({
   boutiqueInfo: Object,
@@ -115,17 +119,22 @@ const props = defineProps({
 });
 
 const { boutiqueInfo, categorie } = toRefs(props)
+const emit = defineEmits(['reloadEvent']);
 
 const isLoadingUpdate = ref(false)
+const isLoading = ref(false)
 const file = ref("")
-const listeCategorie = ref("")
+const errorMessage = ref("")
+const listeCategorie = ref([])
 const boutiqueFields = ref({
-  nom: '',
-  categorie: '',
+  id: "",
+  name: '',
+  category: '',
   description: '',
   indicatif: '',
   phone: '',
-  photo: '',
+  devise: '',
+
   lienFacebook: '',
   lienInstagram: '',
   lienTwitter: '',
@@ -133,10 +142,13 @@ const boutiqueFields = ref({
 
 watch(boutiqueInfo, () => {
   listeCategorie.value = categorie.value
-  boutiqueFields.value.nom = boutiqueInfo.value.name,
-    boutiqueFields.value.description = boutiqueInfo.value.description,
-    boutiqueFields.value.indicatif = boutiqueInfo.value.indicatif,
-    boutiqueFields.value.phone = boutiqueInfo.value.phone
+  boutiqueFields.value.id = boutiqueInfo.value.id,
+  boutiqueFields.value.name = boutiqueInfo.value.name,
+  boutiqueFields.value.devise = boutiqueInfo.value.devise,
+  boutiqueFields.value.category = boutiqueInfo.value.category_id,
+  boutiqueFields.value.description = boutiqueInfo.value.description,
+  boutiqueFields.value.indicatif = boutiqueInfo.value.indicatif,
+  boutiqueFields.value.phone = boutiqueInfo.value.phone
 })
 
 const choosefile = () => {
@@ -163,6 +175,64 @@ const closeModal = () => {
 
 const saveModification = () => {
   isLoadingUpdate.value = true
+
+  const dataToUpdate = {
+    ...boutiqueFields.value,
+    image: file.value
+  }
+
+  try {
+    updateUserStore(dataToUpdate).then((res) => {
+      isLoading.value = false
+      isLoadingUpdate.value = false
+      emit('reloadEvent', 'Hello from child component');
+      closeModal()
+      boutiqueFields.value = {
+        name: '',
+        categorie: '',
+        description: '',
+        indicatif: '',
+        phone: '',
+        photo: '',
+        lienFacebook: '',
+        lienInstagram: '',
+        lienTwitter: '',
+      }
+      files.value = []
+      listeCategorie.value = []
+      snackbar.add({
+        type: 'error',
+        text: "Boutique modifié avec succès",
+        dismissible: true,
+        background: "#10b981"
+      })
+    }).catch(err => {
+      console.log(err)
+      isLoadingUpdate.value = false
+      if (err.code === "ERR_NETWORK") {
+        errorMessage.value = "Vérifiez votre connexion internet et rééssayez"
+      } else {
+        errorMessage.value = err.response.data.message
+      }
+      isLoading.value = false
+      snackbar.add({
+        type: 'error',
+        text: errorMessage.value,
+        dismissible: true,
+        background: "#ef4444"
+      })
+    })
+  } catch (error) {
+    console.log('catch error', err)
+    isLoadingUpdate.value = false
+    isLoading.value = false
+    snackbar.add({
+      type: 'error',
+      text: "Une erreur s'est produite",
+      dismissible: true,
+      background: "#ef4444"
+    })
+  }
 }
 </script>
 

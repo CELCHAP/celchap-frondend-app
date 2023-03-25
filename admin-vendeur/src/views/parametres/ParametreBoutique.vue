@@ -39,7 +39,7 @@
             {{ boutiqueDetail.description }}
           </span>
         </p>
-        <p class="text-base text-gray-500 font-bold mt-4">
+        <!-- <p class="text-base text-gray-500 font-bold mt-4">
           Réseaux sociaux :
         </p>
         <div class="mt-3 w-full">
@@ -58,7 +58,7 @@
             Twitter : <a href="http://twitter.com/dams9ix" target="_blank" rel="noopener noreferrer"
               class="underline text-black font-semibold text-sm">http://twitter.com/dams9ix</a>
           </div>
-        </div>
+        </div> -->
       </div>
     </div>
 
@@ -69,10 +69,15 @@
       <div class="modal-box w-11/12 max-w-xl">
         <h3 class="font-extrabold text-xl text-custom-orange">Modifier les informations</h3>
         <div class="modal-ajout-article mt-5">
-          <EditBoutique :boutiqueInfo="boutiqueDetail" :categorie="listeCategorie" />
+          <EditBoutique :boutiqueInfo="boutiqueDetail" :categorie="listeCategorie" @reloadEvent="handleReloadData" />
         </div>
       </div>
     </div>
+
+
+    <teleport to="body">
+      <vue3-snackbar bottom :duration="4000" dense shadow></vue3-snackbar>
+    </teleport>
   </div>
 </template>
 
@@ -126,6 +131,20 @@ const formatDate = (dateString) => {
 
 const openModalEditBoutique = (item) => {
   document.getElementById('edit-boutique').click()
+}
+
+const handleReloadData = () => {
+  // Récupère des infos de la boutique
+  listUserStore().then(res => {
+    boutiqueDetail.value = res.data.boutique[0]
+  }).catch(err => {
+    snackbar.add({
+      type: 'error',
+      text: 'Impossible de récupérer les informations',
+      dismissible: true,
+      background: "#ef4444"
+    })
+  })
 }
 </script>
 

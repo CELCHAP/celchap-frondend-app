@@ -30,10 +30,14 @@
         <div class="flex flex-col-reverse gap-y-5 sm:grid sm:grid-cols-5 gap-x-4 mt-10 pb-16">
           <div class="w-full h-fit grid grid-cols-2 lg:grid-cols-3 gap-3 rounded-md col-span-2">
             <div class="bg-white w-full h-32 rounded-lg border">
-              <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fcdn1.jolicloset.com%2Fimg4%2Ffull%2F2019%2F05%2F126405-1.jpg&f=1&nofb=1&ipt=5c3e8615a3dafdd9efff8e335d86e3f0da53fded2c20e1017f64ec8a787fddea&ipo=images" alt="" class="object-cover w-full h-full rounded-md">
+              <img
+                src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fcdn1.jolicloset.com%2Fimg4%2Ffull%2F2019%2F05%2F126405-1.jpg&f=1&nofb=1&ipt=5c3e8615a3dafdd9efff8e335d86e3f0da53fded2c20e1017f64ec8a787fddea&ipo=images"
+                alt="" class="object-cover w-full h-full rounded-md">
             </div>
             <div class="bg-orange-100 w-full h-32 rounded-md">
-              <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fcdn1.jolicloset.com%2Fimg4%2Ffull%2F2019%2F09%2F143973-1.jpg&f=1&nofb=1&ipt=ae0c7c82ba93d9095da06e63fcd3f1244106804f7e0c154e1b4652dec0ec25ce&ipo=images" alt="" class="object-cover w-full h-full rounded-md">
+              <img
+                src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fcdn1.jolicloset.com%2Fimg4%2Ffull%2F2019%2F09%2F143973-1.jpg&f=1&nofb=1&ipt=ae0c7c82ba93d9095da06e63fcd3f1244106804f7e0c154e1b4652dec0ec25ce&ipo=images"
+                alt="" class="object-cover w-full h-full rounded-md">
             </div>
             <div class="bg-orange-100 w-full h-32 rounded-md"></div>
             <div class="bg-orange-100 w-full h-32 rounded-md"></div>
@@ -42,18 +46,22 @@
           </div>
           <div class="bg-white w-full h-fit rounded-md shadow-sm col-span-3 p-3 sm:p-5">
             <div class="flex flex-col gap-y-5">
-              <h3 class="text-sm sm:text-base md:text-lg text-neutral-700 font-bold">Nom de l'article : <span
-                  class="text-sm sm:text-base md:text-lg text-gray-700 font-medium">Sac à main GUCCI taille XXL</span></h3>
-              <h3 class="text-sm sm:text-base md:text-lg text-neutral-700 font-bold">Catégorie : <span
-                  class="text-sm sm:text-base md:text-lg text-gray-700 font-medium">Sac à main GUCCI</span></h3>
-              <h3 class="text-sm sm:text-base md:text-lg text-neutral-700 font-bold">Prix normal : <span
-                  class="text-sm sm:text-base md:text-lg text-gray-700 font-medium">34900 FCFA</span></h3>
-              <h3 class="text-sm sm:text-base md:text-lg text-neutral-700 font-bold">Prix de promotion : <span
-                  class="text-sm sm:text-base md:text-lg text-gray-700 font-medium">29900 FCFA</span></h3>
-              <h3 class="text-sm sm:text-base md:text-lg text-neutral-700 font-bold">Description : <span
-                  class="text-sm sm:text-base md:text-lg text-gray-700 font-medium">Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                  Ducimus eaque hic eius iste consequuntur? Quisquam voluptatibus quis distinctio in, vitae ipsam incidunt
-                  placeat doloremque cum, deleniti ipsa molestias sequi facere.</span></h3>
+              <h3 class="text-sm sm:text-base md:text-lg text-orange-600 font-bold">Nom de l'article : <span
+                  class="text-sm sm:text-base md:text-lg text-gray-700 font-medium">{{ articleDetail ? articleDetail.name
+                    : "" }}</span>
+              </h3>
+              <h3 class="text-sm sm:text-base md:text-lg text-orange-600 font-bold">Catégorie : <span
+                  class="text-sm sm:text-base md:text-lg text-gray-700 font-medium">{{ articleDetail ?
+                    articleDetail.categorie.name : "" }}</span></h3>
+              <h3 class="text-sm sm:text-base md:text-lg text-orange-600 font-bold">Prix normal : <span
+                  class="text-sm sm:text-base md:text-lg text-gray-700 font-medium">{{ articleDetail ?
+                    articleDetail.prix_vendeur : "" }} FCFA</span></h3>
+              <h3 class="flex gap-x-1 text-sm sm:text-base md:text-lg text-orange-600 font-bold">Description : 
+                <!-- <span
+                  class="text-sm sm:text-base md:text-lg text-gray-700 font-medium">{{ articleDetail ?
+                    articleDetail.description : "" }}</span> -->
+                    <p class="text-sm sm:text-base md:text-lg text-gray-700" v-html="articleDetail.description"></p>
+              </h3>
             </div>
           </div>
         </div>
@@ -63,9 +71,30 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
+import { useRoute } from 'vue-router';
 import GridLayout from '../../layouts/GridLayout.vue';
 import ProgressSpinner from 'primevue/progressspinner';
+import { filtreArticleParNom } from '../../services/article/ArticleRequest';
+
+const route = useRoute();
+
+const articleDetail = ref("")
+
+onMounted(() => {
+  console.log('PARAMETER', route.params.articleName)
+
+  filtreArticleParNom(route.params.articleName).then(res => {
+    articleDetail.value = res.data.produit[0]
+  }).catch(err => {
+    snackbar.add({
+      type: 'error',
+      text: 'Impossible de récupérer les détails de l\'article',
+      dismissible: true,
+      background: "#ef4444"
+    })
+  })
+})
 </script>
 
 <style></style>

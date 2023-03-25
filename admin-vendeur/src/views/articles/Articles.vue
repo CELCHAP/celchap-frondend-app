@@ -16,23 +16,23 @@
           </label>
           <div tabindex="0" class="dropdown-content menu p-2 shadow bg-base-100 rounded-md w-64 mt-2 border">
             <input type="text" placeholder="Rechercher..."
-              class="w-58 h-11 text-sm font-medium input input-bordered w-full max-w-xs" v-model="searchTerm" />
+              class="w-58 h-11 text-sm font-medium input input-bordered w-full max-w-xs" v-model="searchTerm" @input="onInput" />
             <select class="select-custom-height select select-bordered w-58 max-w-xs font-medium mt-2"
               v-model="categorieSelected">
               <option value="" disabled selected>Choisir une catégorie</option>
-              <option :value="item.id" v-for="(item, index) in listeCategorie" :key="index">{{ item.name }}</option>
+              <option :value="item" v-for="(item, index) in listeCategorie" :key="index">{{ item.name }}</option>
             </select>
           </div>
         </div>
 
         <div class="hidden sm:flex items-center gap-x-3">
           <input type="text" placeholder="Rechercher..."
-            class="w-58 h-11 font-medium input input-bordered w-full max-w-xs" v-model="searchTerm" />
+            class="w-58 h-11 font-medium input input-bordered w-full max-w-xs" v-model="searchTerm" @input="onInput" />
 
           <select class="select-custom-height select select-bordered w-58 max-w-xs font-medium"
             v-model="categorieSelected">
             <option value="" disabled selected>Choisir une catégorie</option>
-            <option :value="item.id" v-for="(item, index) in listeCategorie" :key="index">{{ item.name }}</option>
+            <option :value="item" v-for="(item, index) in listeCategorie" :key="index">{{ item.name }}</option>
           </select>
         </div>
         <div>
@@ -49,7 +49,7 @@
               <th class="bg-black text-xs sm:text-sm text-custom-jaune">Nom</th>
               <th class="bg-black text-xs sm:text-sm text-custom-jaune">catégorie</th>
               <th class="bg-black text-xs sm:text-sm text-custom-jaune">Prix</th>
-              <th class="bg-black text-xs sm:text-sm text-custom-jaune">Quantité en stock</th>
+              <th class="bg-black text-xs sm:text-sm text-custom-jaune">Disponibilité</th>
               <th class="bg-black text-xs sm:text-sm text-custom-jaune">Actions</th>
             </tr>
           </thead>
@@ -62,13 +62,13 @@
               <td class="text-gray-600 text-sm sm:text-base font-medium">{{ item.disponibilite }}</td>
               <td class="text-gray-600 text-sm sm:text-base font-medium">
                 <div class="flex items-center gap-x-3">
-                  <router-link :to="'/articles/detail/' + item.id">
+                  <router-link :to="'/articles/detail/' + item.name">
                     <button class="bg-gray-100 w-8 h-8 flex items-center justify-center text-black rounded-md">
                       <vue-feather size="18" stroke-width="2.1" type="eye"></vue-feather>
                     </button>
                   </router-link>
                   <button class="bg-gray-100 w-8 h-8 flex items-center justify-center text-black rounded-md"
-                    @click="() => openModalEditArticle(item.id)">
+                    @click="() => openModalEditArticle(item)">
                     <vue-feather size="18" stroke-width="2.1" type="edit-2"></vue-feather>
                   </button>
                   <button class="bg-gray-100 w-8 h-8 flex items-center justify-center text-black rounded-md"
@@ -132,10 +132,13 @@
       <input type="checkbox" id="edit-article" class="modal-toggle" />
       <div class="modal">
         <div class="modal-box w-11/12 max-w-2xl">
-          <h3 class="font-extrabold text-xl md:text-2xl text-custom-orange text-">Ajouter un article</h3>
+          <h3 v-if="!articleDetail.name" class="font-extrabold text-xl md:text-2xl text-custom-orange text-">Ajouter un
+            article</h3>
+          <h3 v-if="articleDetail.name" class="font-extrabold text-xl md:text-2xl text-custom-orange text-">Modifier cet
+            article</h3>
           <div class="modal-ajout-article mt-10">
-            <AjoutArticle :article_Detail="articleDetail" :categorie="listeCategorie"
-              :sousCategorie="listeSousCategorie" @reloadEvent="handleReloadArticleListe" />
+            <AjoutArticle :article_Detail="articleDetail" :categorie="listeCategorie" :sousCategorie="listeSousCategorie"
+              @reloadEvent="handleReloadArticleListe" />
           </div>
         </div>
       </div>
@@ -149,13 +152,14 @@
   </GridLayout>
 </template>
 <script setup>
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, watch } from 'vue';
+import { debounce } from 'lodash';
 import GridLayout from '../../layouts/GridLayout.vue';
 import ProgressSpinner from 'primevue/progressspinner';
 import AjoutArticle from './AjoutArticle.vue';
 import { useSnackbar } from "vue3-snackbar";
 import { getCategories, getSousCategories } from '../../services/categorie/CategorieRequest';
-import { getArticlesListe, removeArticle } from '../../services/article/ArticleRequest';
+import { getArticlesListe, removeArticle, filtreArticleParCategorie, filtreArticleParNom } from '../../services/article/ArticleRequest';
 const snackbar = useSnackbar();
 
 const listeArticles = ref([
@@ -170,15 +174,6 @@ const isLoading = ref(false)
 const isLoadingDelete = ref(false)
 
 onMounted(() => {
-  // getUserAndStoreConnected().then(res => {
-  //   userInfo.value = res.data.auth[0]
-  //   if (userInfo.value.boutique_id !== null && userInfo.value.boutiques.length > 0) {
-  //     localStorage.setItem('store', res.data.user.boutique_id)
-  //     router.push({ path: 'dashboard', replace: true })
-  //   }
-  // }).catch(err => console.log(err))
-
-
   // Récupère la liste des articles enregistrés
   getArticlesListe().then(res => {
     listeArticles.value = res.data.produit
@@ -214,6 +209,10 @@ onMounted(() => {
       background: "#ef4444"
     })
   })
+})
+
+watch(categorieSelected, () => {
+  rechercheArticleParCategorie(categorieSelected.value.name)
 })
 
 // Récupère la liste des articles enregistrés
@@ -252,7 +251,6 @@ const displayCategorie = (categoryId) => {
 }
 
 const handleReloadArticleListe = (childMessage) => {
-  console.log(childMessage); // logs "Hello from child component"
   getArticles()
 }
 
@@ -287,6 +285,40 @@ const deleteArticle = () => {
   })
 }
 
+
+const rechercheArticleParCategorie = (categorieId) => {
+  filtreArticleParCategorie(categorieId).then(res => {
+    console.log('RESPO', res.data)
+    listeArticles.value = res.data.produit
+  }).catch(err => {
+    snackbar.add({
+      type: 'error',
+      text: 'Impossible d\'actualiser les articles',
+      dismissible: true,
+      background: "#ef4444"
+    })
+  })
+}
+
+
+const makeRequest = debounce(function () {
+  filtreArticleParNom(searchTerm.value).then(res => {
+    console.log('RESPO x', res.data)
+    listeArticles.value = res.data.produit
+  }).catch(err => {
+    snackbar.add({
+      type: 'error',
+      text: 'Impossible d\'actualiser les articles',
+      dismissible: true,
+      background: "#ef4444"
+    })
+  })
+}, 2000);
+
+function onInput() {
+  console.log('req')
+  makeRequest();
+}
 
 </script>
 

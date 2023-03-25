@@ -52,7 +52,7 @@ const router = createRouter({
       },
     },
     {
-      path: "/articles/detail/:id",
+      path: "/articles/detail/:articleName",
       name: "article-detail",
       component: () => import("../views/articles/ArticleDetail.vue"),
       meta: {
