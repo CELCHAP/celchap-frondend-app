@@ -33,7 +33,7 @@
     </div>
 
     <!-- Editeur de text -->
-    <div class="mt-2">
+    <!-- <div class="mt-2">
       <label class="label">
         <span class="text-sm sm:text-base font-semibold">Description de l'article</span>
       </label>
@@ -73,8 +73,25 @@
         </div>
         <editor-content :editor="editor" />
       </div>
-    </div>
+    </div> -->
     <!-- Fin editeur de texte -->
+
+    <div class="mt-2">
+      <label class="label">
+        <span class="label-text text-sm sm:text-base font-semibold">Description du produit</span>
+      </label>
+      <Editor api-key="4jexc5u6jwfow6cbscsx48djxwpot3sby1ukqvlje7zg914r" :init="{
+        height: 200,
+        menubar: false,
+        plugins: [
+          'advlist autolink lists link image charmap print preview anchor',
+          'searchreplace visualblocks code fullscreen',
+          'insertdatetime media table paste code help wordcount'
+        ],
+        toolbar:
+          'undo redo | bold italic | \ alignleft aligncenter alignright alignjustify | \ bullist numlist outdent indent'
+      }" v-model="articleDataField.description" output-format="text" />
+    </div>
 
     <div class="column flex items-center gap-x-4 mt-2">
       <div class="form-control w-full">
@@ -151,6 +168,7 @@ import { useEditor, EditorContent } from '@tiptap/vue-3'
 import ProgressSpinner from 'primevue/progressspinner';
 import StarterKit from '@tiptap/starter-kit'
 import { useSnackbar } from "vue3-snackbar";
+import Editor from '@tinymce/tinymce-vue'
 import { saveNewArticle, updateArticle } from '../../services/article/ArticleRequest';
 
 const snackbar = useSnackbar();
@@ -166,6 +184,7 @@ const emit = defineEmits(['reloadEvent']);
 
 const isLoading = ref(false)
 const errorMessage = ref("")
+const content = ref("Juste un test")
 const files = ref([])
 const listeCategorie = ref([])
 const listeSousCategorie = ref([])

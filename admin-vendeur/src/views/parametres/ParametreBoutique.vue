@@ -5,7 +5,8 @@
     <div class="flex flex-col sm:flex-row items-start sm:items-start justify-between gap-x-5">
       <div class="flex items-start gap-x-5">
         <div class="bg-gray-200 w-24 h-24 sm:w-32 sm:h-32 text-black rounded-md flex items-center justify-center">
-          <vue-feather size="30" stroke-width="2.1" type="image"></vue-feather>
+          <vue-feather v-if="boutiqueDetail.media.length === 0" size="30" stroke-width="2.1" type="image"></vue-feather>
+          <img v-if="boutiqueDetail.media.length !== 0" :src="boutiqueDetail.media[0].original_url" alt="" class="object-cover w-full">
         </div>
         <div>
           <p class="text-xs sm:text-sm text-gray-400 font-medium">Nom de la boutique:</p>
@@ -85,7 +86,7 @@
 import { ref, onMounted } from 'vue';
 import EditBoutique from './EditBoutique.vue';
 import { getCategories } from '../../services/categorie/CategorieRequest';
-import { listUserStore } from '../../services/boutique/boutiqueRequest'
+import { listUserStore } from '../../services/boutique/BoutiqueRequest';
 
 const boutiqueDetail = ref({})
 const listeCategorie = ref([])

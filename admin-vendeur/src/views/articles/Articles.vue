@@ -1,11 +1,11 @@
 <template>
   <GridLayout>
-    <div class="w-full px-6 pt-10 md:pt-6">
-      <h1 class="text-2xl md:text-3xl text-black font-bold">Gestion des articles</h1>
-      <p class="text-gray-500 text-sm sm:text-base mt-3">Enregistrer les articles qui apparaitront sur votre boutique</p>
+    <div class="w-full px-5 pt-10 md:pt-10">
+      <h1 class="text-3xl md:text-4xl text-black font-extrabold">Gestion des articles</h1>
+      <p class="text-gray-700 text-sm sm:text-base font-medium mt-3">Enregistrer les articles qui apparaitront sur votre boutique</p>
 
       <!-- Filtre de recherche -->
-      <div class="mt-10 flex items-center justify-between gap-x-5">
+      <div class="mt-16 flex items-center justify-between gap-x-5">
         <div class="dropdown block sm:hidden">
           <label tabindex="0">
             <button
@@ -36,21 +36,21 @@
           </select>
         </div>
         <div>
-          <button class="bg-custom-orange w-32 sm:w-36 h-10 text-white text-xs sm:text-sm font-bold rounded-md shadow-sm"
+          <button class="bg-custom-orange w-32 sm:w-36 h-10 text-white text-xs sm:text-sm font-bold rounded-xl shadow-md"
             @click="() => openModalEditArticle('')">Ajouter un article</button>
         </div>
       </div>
 
-      <div className="overflow-x-auto mt-5">
-        <table className="table table-zebra w-full border">
-          <thead class="bg-black">
+      <div class="overflow-x-auto mt-5">
+        <table class="table table-zebr w-full">
+          <thead class="bg-stone-200">
             <tr>
-              <th class="bg-black text-custom-jaune"></th>
-              <th class="bg-black text-xs sm:text-sm text-custom-jaune">Nom</th>
-              <th class="bg-black text-xs sm:text-sm text-custom-jaune">catégorie</th>
-              <th class="bg-black text-xs sm:text-sm text-custom-jaune">Prix</th>
-              <th class="bg-black text-xs sm:text-sm text-custom-jaune">Disponibilité</th>
-              <th class="bg-black text-xs sm:text-sm text-custom-jaune">Actions</th>
+              <th class="bg-stone-200 text-black font-extrabold"></th>
+              <th class="bg-stone-200 text-xs sm:text-sm text-black font-extrabold">Nom</th>
+              <th class="bg-stone-200 text-xs sm:text-sm text-black font-extrabold">catégorie</th>
+              <th class="bg-stone-200 text-xs sm:text-sm text-black font-extrabold">Prix</th>
+              <th class="bg-stone-200 text-xs sm:text-sm text-black font-extrabold">Disponibilité</th>
+              <th class="bg-stone-200 text-xs sm:text-sm text-black font-extrabold">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -131,7 +131,7 @@
       <!-- Modal ajout ou modification d'article -->
       <input type="checkbox" id="edit-article" class="modal-toggle" />
       <div class="modal">
-        <div class="modal-box w-11/12 max-w-2xl">
+        <div class="modal-box w-11/12 max-w-xl">
           <h3 v-if="!articleDetail.name" class="font-extrabold text-xl md:text-2xl text-custom-orange text-">Ajouter un
             article</h3>
           <h3 v-if="articleDetail.name" class="font-extrabold text-xl md:text-2xl text-custom-orange text-">Modifier cet

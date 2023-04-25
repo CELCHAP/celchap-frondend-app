@@ -117,7 +117,8 @@ const fields = ref({
   localisation: '',
   email: '',
   password: '',
-  image: ''
+  image: '',
+  role: 'vendeur'
 })
 
 const choosefile = () => {
@@ -144,7 +145,7 @@ const createAccount = () => {
   }
 
   try {
-    signUp(fields.value).then((res) => {
+    signUp(formData).then((res) => {
       isLogging.value = false
       localStorage.setItem("access", res.data.access_token)
       router.push({ path: 'nouvelle-boutique', replace: true })
