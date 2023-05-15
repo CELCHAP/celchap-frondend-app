@@ -12,9 +12,16 @@ defineProps({
          <img class="w-full h-full object-cover rounded-lg" v-lazy="img" alt="" />
       </div>
 
-      <div class="flex flex-col  mx-1">
+      <div class="flex flex-col gap-2 mx-1">
          <p class=" text-xs font-normal flex">{{ title }}</p>
-         <span class="text-sm font-bold"> {{ price }} </span>
+         
+         <div class="flex flex-col">
+            <span class="text-thin font-bold"> {{ price }} </span>
+            <span class="text-xs">1 unité (Com) </span>
+         </div>
+
+         
+         
       </div>
    </a>
 </template>

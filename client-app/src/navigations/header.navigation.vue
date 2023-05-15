@@ -22,7 +22,7 @@ window.addEventListener('scroll', handleScroll);
 const { MenuHeaders, MenuHeaderActived } = useNavigationComposable();
 </script>
 <template>
-   <div class="flex flex-col w-full bg-white fixed top-0 z-20 shadow-sm">
+   <div class="flex flex-col w-full bg-white fixed top-0 z-20 shadow-sm hidden">
       <!-- Fist section Header -->
       <Transition>
          <div class="flex justify-between w-11/12 m-auto pt-4" v-if="isUp">
@@ -54,6 +54,21 @@ const { MenuHeaders, MenuHeaderActived } = useNavigationComposable();
          </div>
       </div>
    </div>
+   <section class="fixed inset-0 h-14 bg-white z-40 w-full shadow-sm">
+      <div class="flex justify-center items-center w-11/12 m-auto h-full">
+         <!-- <div class="">
+            <i class="fi fi-sr-bars-sort flex"></i>
+         </div> -->
+
+         <div class="">
+            <span class="text-lg font-black text-orange-500">LIKIDONS.</span>
+         </div>
+
+         <div class="">
+            <i></i>
+         </div>
+      </div>
+   </section>
    {{ MenuHeaderActived }}
 </template>
 <style scoped></style>

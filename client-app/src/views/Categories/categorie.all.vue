@@ -4,7 +4,7 @@ import PorductsCardAll from '../../components/cards/products/porductsCardAll.vue
 import HeadingRedirect from '../../components/heading/headingRedirect.vue';
 import BackBarLayout from '../../layouts/backBar.layout.vue';
 import ProductCardMin from "../../components/cards/products/productCardMin.vue"
-import { onMounted } from 'vue';
+import { onMounted, ref } from 'vue';
 
 defineProps({
     name: String

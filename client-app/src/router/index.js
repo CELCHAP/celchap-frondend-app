@@ -77,15 +77,52 @@ const router = createRouter({
          },
       },
 
-      // Toutes les routes de My store
+      // Toutes les routes de profil
       {
          path: '/ma-boutique',
          name: 'MyStore',
-         component: () => import('../views/Home/index.home.vue'),
+         component: () => import('../views/profiles/store.profile.vue'),
          meta: {
             requiresAuth: false,
          },
       },
+      {
+         path: '/mon-profile',
+         name: 'MyProfile',
+         component: () => import('../views/profiles/user.profile.vue'),
+         meta: {
+            requiresAuth: false,
+         },
+      },
+
+        // Auth
+        {
+         path: '/sign-up',
+         name: 'SignUp',
+         component: () => import('../views/auth/sign-up.vue'),
+         meta: {
+            requiresAuth: false,
+         },
+      },
+
+      {
+         path: '/sign-in',
+         name: 'SignIn',
+         component: () => import('../views/auth/sign-in.vue'),
+         meta: {
+            requiresAuth: false,
+         },
+      },
+
+      {
+         path: '/sign-store',
+         name: 'SignStore',
+         component: () => import('../views/auth/sign-sotre.vue'),
+         meta: {
+            requiresAuth: false,
+         },
+      },
+
 
       {
          // the 404 route, when none of the above matches

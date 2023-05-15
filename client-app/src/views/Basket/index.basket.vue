@@ -6,6 +6,9 @@ import BackBarLayout from '../../layouts/backBar.layout.vue'
 import BasketCard from '../../components/cards/baskets/basket.card.vue';
 import BasketOrder from '../../components/cards/baskets/basketOrder.card.vue'
 import BasketCheckout from '../../components/cards/baskets/basketCheckout.card.vue'
+import { ref } from 'vue';
+
+const closeOrder = ref(true)
 
    
 </script>
@@ -13,21 +16,23 @@ import BasketCheckout from '../../components/cards/baskets/basketCheckout.card.v
     <BackBarLayout :name="'Paniers'" />
 
     
-    <div class=" m-auto mt-12 ">
-
+    <div class="py-12 h-[80vh] overflow-auto">
+      
         <!-- Permier qui represente l'ensemble des items -->
-       <div class="flex flex-col space-y-4 divide-y h-[78vh] overflow-auto p-4">
+       <div class="flex flex-col space-y-4 divide-y  p-4">
         <div v-for="items in 8" class="">
             <BasketCard />
         </div>
        </div>
 
-        <!-- Options de passer la commande -->
-        <BasketOrder />
+       
 
     </div>
 
-    <BasketCheckout />
+     <!-- Options de passer la commande -->
+     <BasketOrder @close="(value) => closeOrder = value" />
+
+    <BasketCheckout v-if="!closeOrder" @close="(value) => closeOrder = value"  />
 
 
     <!-- <FooterNavigation /> -->

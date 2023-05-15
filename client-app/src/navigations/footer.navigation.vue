@@ -14,8 +14,8 @@ const { MenuFooter, MenuFooterActived } = useNavigationComposable();
       
          <div  v-for="menuF in MenuFooter" >
             <RouterLink :to="{name: menuF.link}" class="flex flex-col items-center justify-center gap-1" :class="menuF.actived ? ' opacity-100 text-orange-400' : ' opacity-60'">
-                <i class="flex text-xl" :class="menuF.actived ? menuF.isAIcon : menuF.icon"></i>
-            <span class="text-xs"> {{ menuF.name }} </span>
+                <i class="flex text-base" :class="menuF.actived ? menuF.isAIcon : menuF.icon"></i>
+            <span class="text-xs" :class="menuF.actived ? 'font-extrabold' : ''" > {{ menuF.name }} </span>
             </RouterLink>
         </div>
       </div>

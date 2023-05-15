@@ -6,6 +6,8 @@ import {ref} from "vue"
 
 <template>
 <RouterView />
+<div class="bg-gray-50/20 fixed -z-40 inset-0"></div>
+
 </template>
 
 <style >

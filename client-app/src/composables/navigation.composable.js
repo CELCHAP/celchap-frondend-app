@@ -21,18 +21,26 @@ export const useNavigationComposable = () => {
          isAIcon: 'fi fi-sr-search',
          actived: false,
       },
-      {
-         name: 'Panier',
-         link: 'Basket',
-         icon: 'fi fi-bs-shopping-cart',
-         isAIcon: 'fi fi-sr-shopping-cart',
-         actived: false,
-      },
+      // {
+      //    name: 'Panier',
+      //    link: 'Basket',
+      //    icon: 'fi fi-bs-shopping-cart',
+      //    isAIcon: 'fi fi-sr-shopping-cart',
+      //    actived: false,
+      // },
       {
          name: 'Boutique',
          link: 'MyStore',
          icon: 'fi fi-bs-shop',
          isAIcon: 'fi fi-sr-shop',
+         actived: false,
+      },
+
+      {
+         name: 'Profile',
+         link: 'MyProfile',
+         icon: 'fi fi-bs-user',
+         isAIcon: 'fi fi-sr-user',
          actived: false,
       },
    ]);

@@ -10,8 +10,8 @@ defineProps({
 
 
 <a :href="redirect" class="">
-    <div class="flex justify-between items-center">
-       <p class="text-lg font-bold"> {{ name }} </p>
+    <div class="flex justify-between items-center opacity-90">
+       <p class="text-xl opacity- font-black"> {{ name }} </p>
 
        <div class="flex">
           <i class="fi fi-bs-arrow-right flex"></i>
