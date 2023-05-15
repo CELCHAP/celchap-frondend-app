@@ -1,6 +1,140 @@
 <template>
-  <div class="bg-gray-50">
-    <div class="parent min-h-screen">
+  <div class="bg-neutral-100 min-h-screen w-full">
+
+    <div class="lg:flex">
+      <div class="myDiv relative w-96 bg-white min-h-screen hidden lg:block">
+        <div class="w-full h-16 px-8 flex items-center justify-center">
+          <h1 class="text-3xl text-custom-orange text-center font-extrabold">Celchap.</h1>
+        </div>
+        <div class="mt-10 w-11/12 mx-auto h-fit p-5">
+          <router-link to="/paremetres/compte">
+            <div class="w-16 h-16 mx-auto rounded-full bg-gray-200 flex items-center justify-center">
+              <vue-feather size="30" stroke-width="2.1" type="user"></vue-feather>
+            </div>
+          </router-link>
+          <div class="mt-3 px-4">
+            <router-link to="/parametres/compte">
+              <p class="text-center text-black text-sm lg:text-base font-semibold">{{ userName }}</p>
+            </router-link>
+            <p class="text-center text-gray-600 text-sm lg:text-base font-medium">{{ indicatif }} {{ phone }}</p>
+          </div>
+        </div>
+        <div class="px-4 mt-14 relative">
+          <router-link to="/dashboard">
+            <div
+              class="hover:bg-orange-100 hover:text-orange-500 hover:font-extrabold text-black capitalize hover:shadow-sm hover:shadow-custom-orange/10 rounded-xl px-4 h-11 flex items-center gap-x-2 mt-3 cursor-pointer">
+              <vue-feather size="22" stroke-width="2.1" type="home"></vue-feather>
+              <p class="text-base font-semibold">Dashboard</p>
+            </div>
+          </router-link>
+          <router-link to="/articles">
+            <div
+              class="hover:bg-orange-100 hover:text-orange-500 hover:font-extrabold text-black capitalize hover:shadow-sm hover:shadow-custom-orange/10 rounded-xl px-4 h-11 flex items-center gap-x-2 mt-3 cursor-pointer">
+              <vue-feather size="22" stroke-width="2.1" type="package"></vue-feather>
+              <p class="text-base font-semibold">Mes articles</p>
+            </div>
+          </router-link>
+          <router-link to="/commandes">
+            <div
+              class="hover:bg-orange-100 hover:text-orange-500 hover:font-extrabold text-black capitalize hover:shadow-sm hover:shadow-custom-orange/10 rounded-xl px-4 h-11 flex items-center gap-x-2 mt-3 cursor-pointer">
+              <vue-feather size="22" stroke-width="2.1" type="shopping-bag"></vue-feather>
+              <p class="text-base font-semibold">Mes commandes</p>
+            </div>
+          </router-link>
+          <router-link to="/parametres">
+            <div
+              class="hover:bg-orange-100 hover:text-orange-500 hover:font-extrabold text-black capitalize hover:shadow-sm hover:shadow-custom-orange/10 rounded-xl px-4 h-11 flex items-center gap-x-2 mt-3 cursor-pointer">
+              <vue-feather size="22" stroke-width="2.1" type="settings"></vue-feather>
+              <p class="text-base font-semibold">Paramètre</p>
+            </div>
+          </router-link>
+        </div>
+        <div class="absolute w-full bottom-5 px-4 flex items-center justify-center">
+          <div
+            class="w-full bg-red-600 text-white shadow-lg rounded-xl px-6 h-10 flex items-center justify-center gap-x-2 mt-3 cursor-pointer"
+            @click="deconnexion">
+            <ProgressSpinner v-if="isLoggingOut" style="width:25px;height:25px" strokeWidth="5" fill="none"
+              animationDuration=".5s" aria-label="Custom ProgressSpinner" />
+            <vue-feather v-if="!isLoggingOut" size="20" stroke-width="2.1" type="log-out"></vue-feather>
+            <p v-if="!isLoggingOut" class="text-sm font-semibold uppercase">Déconnexion</p>
+          </div>
+        </div>
+      </div>
+      <div class="flex items-center lg:hidden w-full h-16 bg-white shadow-md">
+        <div class="h-full w-11/12 mx-auto flex items-center justify-between">
+          <h1 class="text-3xl text-custom-orange text-center font-extrabold">Celchap.</h1>
+          <button icon="pi pi-arrow-right" @click="visibleLeft = true" class="flex items-center justify-center">
+            <vue-feather size="30" stroke-width="2.1" type="menu"></vue-feather>
+          </button>
+        </div>
+      </div>
+      <div class="bg-neutral-100 w-full h-full">
+        <slot />
+      </div>
+    </div>
+
+    <Sidebar v-model:visible="visibleLeft" :baseZIndex="10000">
+      <aside class="relative h-full bg-white">
+        <!-- <div class="w-full h-16 px-8 flex items-center justify-center">
+          <h1 class="text-3xl text-custom-orange text-center font-extrabold">Celchap.</h1>
+        </div> -->
+        <div class="mt-8">
+          <router-link to="/parametres/compte">
+            <div class="w-16 h-16 mx-auto rounded-full bg-gray-200 flex items-center justify-center">
+              <vue-feather size="30" stroke-width="2.1" type="user"></vue-feather>
+            </div>
+          </router-link>
+          <div class="mt-3 px-4">
+            <router-link to="/parametres/compte">
+              <p class="text-center text-black text-sm lg:text-base font-semibold">{{ userName }}</p>
+            </router-link>
+            <p class="text-center text-gray-400 text-sm lg:text-base font-medium">{{ indicatif }} {{ phone }}</p>
+          </div>
+        </div>
+        <div class="px-4 mt-10 relative h-80">
+          <router-link to="/dashboard">
+            <div
+              class="hover:bg-orange-50 hover:text-orange-400 text-gray-800 hover:shadow-sm hover:shadow-custom-orange/10 rounded-xl px-4 h-11 flex items-center gap-x-2 mt-3 cursor-pointer">
+              <vue-feather size="22" stroke-width="2.1" type="home"></vue-feather>
+              <p class="text-base font-semibold">Dashboard</p>
+            </div>
+          </router-link>
+          <router-link to="/articles">
+            <div
+              class="hover:bg-orange-50 hover:text-orange-400 text-gray-800 hover:shadow-sm hover:shadow-custom-orange/10 rounded-xl px-4 h-11 flex items-center gap-x-2 mt-3 cursor-pointer">
+              <vue-feather size="22" stroke-width="2.1" type="package"></vue-feather>
+              <p class="text-base font-semibold">Mes articles</p>
+            </div>
+          </router-link>
+          <router-link to="/commandes">
+            <div
+              class="hover:bg-orange-50 hover:text-orange-400 text-gray-800 hover:shadow-sm hover:shadow-custom-orange/10 rounded-xl px-4 h-11 flex items-center gap-x-2 mt-3 cursor-pointer">
+              <vue-feather size="22" stroke-width="2.1" type="shopping-bag"></vue-feather>
+              <p class="text-base font-semibold">Mes commandes</p>
+            </div>
+          </router-link>
+          <router-link to="/parametres">
+            <div
+              class="hover:bg-orange-50 hover:text-orange-400 text-gray-800 hover:shadow-sm hover:shadow-custom-orange/10 rounded-xl px-4 h-11 flex items-center gap-x-2 mt-3 cursor-pointer">
+              <vue-feather size="22" stroke-width="2.1" type="settings"></vue-feather>
+              <p class="text-base font-semibold">Paramètre</p>
+            </div>
+          </router-link>
+        </div>
+        <div class="w-full bottom-5 px-4 flex items-center justify-center">
+          <div
+            class="w-full bg-black text-white shadow-lg rounded-xl px-6 h-11 flex items-center justify-center gap-x-2 mt-3 cursor-pointer"
+            @click="deconnexion">
+            <ProgressSpinner v-if="isLoggingOut" style="width:25px;height:25px" strokeWidth="5" fill="none"
+              animationDuration=".5s" aria-label="Custom ProgressSpinner" />
+            <vue-feather v-if="!isLoggingOut" size="20" stroke-width="2.1" type="log-out"></vue-feather>
+            <p v-if="!isLoggingOut" class="text-sm font-semibold">Déconnexion</p>
+          </div>
+        </div>
+      </aside>
+    </Sidebar>
+
+    <!-- <div class="parent min-h-screen">
       <aside class="div1 relative h-full bg-white border-r">
         <div class="w-full h-16 px-8 flex items-center justify-center">
           <h1 class="text-3xl text-custom-orange text-center font-extrabold">Celchap.</h1>
@@ -62,9 +196,9 @@
 
       <Sidebar v-model:visible="visibleLeft" :baseZIndex="10000">
         <aside class="relative h-full bg-white">
-          <!-- <div class="w-full h-16 px-8 flex items-center justify-center">
+          <div class="w-full h-16 px-8 flex items-center justify-center">
             <h1 class="text-3xl text-custom-orange text-center font-extrabold">Celchap.</h1>
-          </div> -->
+          </div>
           <div class="mt-">
             <router-link to="/parametres/compte">
               <div class="w-16 h-16 mx-auto rounded-full bg-gray-200 flex items-center justify-center">
@@ -134,10 +268,10 @@
         </div>
       </header>
 
-      <main class="div3 bg-gray-50">
+      <main class="div2 bg-[#f6f5f8]">
         <slot />
       </main>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -188,75 +322,17 @@ const deconnexion = () => {
 </script>
 
 <style scoped>
-.parent {
-  display: grid;
-  grid-template-columns: repeat(11, 1fr);
-  grid-template-rows: repeat(11, 1fr);
-  grid-column-gap: 0px;
-  grid-row-gap: 0px;
-}
-
-.div1 {
-  grid-area: 1 / 1 / 12 / 3;
-}
-
-.div2 {
-  grid-area: 1 / 3 / 2 / 12;
-}
-
-.div3 {
-  grid-area: 2 / 3 / 12 / 12;
-}
-
-@media screen and (max-width: 1240px) {
-  .parent {
-    display: grid;
-    grid-template-columns: repeat(8, 1fr);
-    grid-template-rows: repeat(11, 1fr);
-    grid-column-gap: 0px;
-    grid-row-gap: 0px;
-  }
-
-  .div1 {
-    grid-area: 1 / 1 / 12 / 3;
-  }
-
-  .div2 {
-    grid-area: 1 / 3 / 2 / 12;
-  }
-
-  .div3 {
-    grid-area: 2 / 3 / 12 / 12;
-  }
-}
-
-@media screen and (max-width: 1024px) {
-  .parent {
-    display: block;
-  }
-
-  .div1 {
-    position: absolute;
-    width: 300px;
-    transform: translate(-300px);
-  }
-
-  .div2 {
-    grid-area: 1 / 3 / 2 / 12;
-  }
-
-  .div3 {
-    grid-area: 2 / 3 / 12 / 12;
-  }
+.myDiv {
+  box-shadow: 5px 0 5px -10px #000000;
 }
 
 .cellchap-active-link div {
-  background-color: #fff7ed;
+  background-color: #ffedd5;
   color: #f97316;
 }
 
 .cellchap-active-link div p {
-  font-weight: 700 !important;
+  /* font-weight: 800 !important; */
 }
 
 @keyframes p-progress-spinner-color {

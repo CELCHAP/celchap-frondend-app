@@ -1,23 +1,25 @@
 <template>
   <GridLayout>
-    <div class="w-full px-6 pt-10 md:pt-6">
-      <h1 class="text-xl sm:text-2xl md:text-3xl text-black font-bold">Bonjour N'da</h1>
+    <div class="w-full px-10 pt-10 md:pt-10">
+      <div class="h-20">
+        <h1 class="text-xl sm:text-2xl md:text-3xl text-black font-bold">Bonjour N'da</h1>
+      </div>
 
       <div class="w-full h-fit grid grid-cols-2 md:grid-cols-4 gap-4 mt-5">
-        <div class="bg-red-100 w-full h-full border p-3 sm:p-5 rounded-md">
-          <h2 class="text-sm sm:text-base text-gray-700 font-semibold">Revenu généré (FCFA)</h2>
+        <div class="bg-red-100/80 w-full h-full shadow-sm p-3 sm:p-5 rounded-md">
+          <h2 class="text-sm sm:text-base text-black font-semibold">Revenu généré (FCFA)</h2>
           <p class="text-xl sm:text-2xl font-extrabold mt-2">12.340.000</p>
         </div>
-        <div class="bg-indigo-100 w-full h-full border p-3 sm:p-5 rounded-md">
-          <h2 class="text-sm sm:text-base text-gray-700 font-semibold">Commandes reçues</h2>
+        <div class="bg-indigo-100/80 w-full h-full shadow-sm p-3 sm:p-5 rounded-md">
+          <h2 class="text-sm sm:text-base text-black font-semibold">Commandes reçues</h2>
           <p class="text-xl sm:text-2xl font-extrabold mt-2">12</p>
         </div>
-        <div class="bg-amber-100 w-full h-full border p-3 sm:p-5 rounded-md">
-          <h2 class="text-sm sm:text-base text-gray-700 font-semibold">Nombre de client</h2>
+        <div class="bg-amber-100/80 w-full h-full shadow-sm p-3 sm:p-5 rounded-md">
+          <h2 class="text-sm sm:text-base text-black font-semibold">Nombre de client</h2>
           <p class="text-xl sm:text-2xl font-extrabold mt-2">12</p>
         </div>
-        <div class="bg-sky-100 w-full h-full border p-3 sm:p-5 rounded-md">
-          <h2 class="text-sm sm:text-base text-gray-700 font-semibold">Articles enregistrés</h2>
+        <div class="bg-sky-100/80 w-full h-full shadow-sm p-3 sm:p-5 rounded-md">
+          <h2 class="text-sm sm:text-base text-black font-semibold">Articles enregistrés</h2>
           <p class="text-xl sm:text-2xl font-extrabold mt-2">12</p>
         </div>
       </div>

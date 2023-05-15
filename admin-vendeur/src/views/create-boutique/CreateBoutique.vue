@@ -154,8 +154,14 @@ const createNewStore = () => {
   isLoading.value = true
   errorMessage.value = ""
 
+  const formData = new FormData();
+
+  for (const key in fields.value) {
+    formData.append(key, fields.value[key]);
+  }
+
   try {
-    createNewUserStore(fields.value).then((res) => {
+    createNewUserStore(formData).then((res) => {
       isLoading.value = false
       router.push({ path: 'dashboard', replace: true })
       localStorage.setItem('category', res.data.boutique.category_id)

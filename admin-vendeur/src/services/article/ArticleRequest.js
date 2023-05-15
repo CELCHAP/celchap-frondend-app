@@ -21,9 +21,21 @@ export const saveNewArticle = async (values) => {
 };
 
 export const updateArticle = async (values) => {
-  return await axios.post(BASE_URL("api/produit/update"), {});
+  return await axios.post(BASE_URL("api/produit/update"), values);
 };
 
 export const removeArticle = async (articleId) => {
   return await axios.post(BASE_URL("api/produit/destroy"), { id: articleId });
+};
+
+export const filtreArticleParName = async (articleName) => {
+  return await axios.get(BASE_URL(`api/produit/index?name=${articleName}`), {});
+};
+
+export const filtreArticleParCategorie = async (categorieId) => {
+  return await axios.get(BASE_URL(`api/produit/index?categorie=${categorieId}`), {});
+};
+
+export const filtreArticleParNom = async (search) => {
+  return await axios.get(BASE_URL(`api/produit/index?filter=${search}`), {});
 };

@@ -5,7 +5,8 @@
     <div class="flex flex-col sm:flex-row items-start sm:items-start justify-between gap-x-5">
       <div class="flex items-start gap-x-5">
         <div class="bg-gray-200 w-24 h-24 sm:w-32 sm:h-32 text-black rounded-md flex items-center justify-center">
-          <vue-feather size="30" stroke-width="2.1" type="image"></vue-feather>
+          <vue-feather v-if="boutiqueDetail.media.length === 0" size="30" stroke-width="2.1" type="image"></vue-feather>
+          <img v-if="boutiqueDetail.media.length !== 0" :src="boutiqueDetail.media[0].original_url" alt="" class="object-cover w-full">
         </div>
         <div>
           <p class="text-xs sm:text-sm text-gray-400 font-medium">Nom de la boutique:</p>
@@ -39,7 +40,7 @@
             {{ boutiqueDetail.description }}
           </span>
         </p>
-        <p class="text-base text-gray-500 font-bold mt-4">
+        <!-- <p class="text-base text-gray-500 font-bold mt-4">
           Réseaux sociaux :
         </p>
         <div class="mt-3 w-full">
@@ -58,7 +59,7 @@
             Twitter : <a href="http://twitter.com/dams9ix" target="_blank" rel="noopener noreferrer"
               class="underline text-black font-semibold text-sm">http://twitter.com/dams9ix</a>
           </div>
-        </div>
+        </div> -->
       </div>
     </div>
 
@@ -69,10 +70,15 @@
       <div class="modal-box w-11/12 max-w-xl">
         <h3 class="font-extrabold text-xl text-custom-orange">Modifier les informations</h3>
         <div class="modal-ajout-article mt-5">
-          <EditBoutique :boutiqueInfo="boutiqueDetail" :categorie="listeCategorie" />
+          <EditBoutique :boutiqueInfo="boutiqueDetail" :categorie="listeCategorie" @reloadEvent="handleReloadData" />
         </div>
       </div>
     </div>
+
+
+    <teleport to="body">
+      <vue3-snackbar bottom :duration="4000" dense shadow></vue3-snackbar>
+    </teleport>
   </div>
 </template>
 
@@ -80,7 +86,7 @@
 import { ref, onMounted } from 'vue';
 import EditBoutique from './EditBoutique.vue';
 import { getCategories } from '../../services/categorie/CategorieRequest';
-import { listUserStore } from '../../services/boutique/boutiqueRequest'
+import { listUserStore } from '../../services/boutique/BoutiqueRequest';
 
 const boutiqueDetail = ref({})
 const listeCategorie = ref([])
@@ -126,6 +132,20 @@ const formatDate = (dateString) => {
 
 const openModalEditBoutique = (item) => {
   document.getElementById('edit-boutique').click()
+}
+
+const handleReloadData = () => {
+  // Récupère des infos de la boutique
+  listUserStore().then(res => {
+    boutiqueDetail.value = res.data.boutique[0]
+  }).catch(err => {
+    snackbar.add({
+      type: 'error',
+      text: 'Impossible de récupérer les informations',
+      dismissible: true,
+      background: "#ef4444"
+    })
+  })
 }
 </script>
 
