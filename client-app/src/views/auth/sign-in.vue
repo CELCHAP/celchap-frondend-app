@@ -51,8 +51,10 @@ const SignIn = async (e) => {
          inputError.message = error.message;
       }
       if(data){
+         console.log(data)
          localStorage.setItem('access_token', data.access_token)
          localStorage.setItem('user', JSON.stringify(data.user))
+         data.user[0].boutique_id ? localStorage.setItem('Store', JSON.stringify(data.user[0].boutiques[0])) : ''
          window.location.assign('/')
       }
    });
