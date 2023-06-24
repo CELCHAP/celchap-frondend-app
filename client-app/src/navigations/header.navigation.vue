@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import { useNavigationComposable } from '../composables/navigation.composable';
 defineProps({
    msg: String,
@@ -17,6 +17,16 @@ const handleScroll = () => {
    }
    scrollPosition = window.scrollY;
 };
+
+const isUserExist = ref(false)
+
+onMounted(() => {
+   console.log(window.localStorage.getItem('access_token'))
+   if(window.localStorage.getItem('access_token')){
+      isUserExist.value = true
+   }
+})
+
 
 window.addEventListener('scroll', handleScroll);
 const { MenuHeaders, MenuHeaderActived } = useNavigationComposable();
@@ -55,7 +65,7 @@ const { MenuHeaders, MenuHeaderActived } = useNavigationComposable();
       </div>
    </div>
    <section class="fixed inset-0 h-14 bg-white z-40 w-full shadow-sm">
-      <div class="flex justify-center items-center w-11/12 m-auto h-full">
+      <div class="flex justify-between items-center w-11/12 m-auto h-full">
          <!-- <div class="">
             <i class="fi fi-sr-bars-sort flex"></i>
          </div> -->
@@ -64,8 +74,10 @@ const { MenuHeaders, MenuHeaderActived } = useNavigationComposable();
             <span class="text-lg font-black text-orange-500">LIKIDONS.</span>
          </div>
 
-         <div class="">
-            <i></i>
+         <div class="" >
+            <RouterLink v-if="!isUserExist" to="/sign-in" class="bg-purple-500 text-xs text-white font-bold px-2 py-2 rounded-md">Se connecter</RouterLink>
+            <RouterLink v-if="$route.name == 'Delivery'" to="/sign-in" class="bg-purple-500 text-xs text-white font-bold px-2 py-2 rounded-md"> Espace Livreur </RouterLink>
+
          </div>
       </div>
    </section>

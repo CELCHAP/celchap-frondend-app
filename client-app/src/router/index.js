@@ -7,7 +7,6 @@ import {
 const router = createRouter({
    history: createWebHistory(import.meta.env.BASE_URL),
    routes: [
-
       // Produit
       {
          path: '/',
@@ -18,7 +17,7 @@ const router = createRouter({
          },
       },
       {
-         path: '/product/:slug',
+         path: '/product/:slug/:code',
          name: 'DetailProduct',
          component: () => import('../views/Home/products/detail.product.vue'),
          meta: {
@@ -43,8 +42,6 @@ const router = createRouter({
             requiresAuth: false,
          },
       },
-
-
 
       // Produit
 
@@ -95,8 +92,8 @@ const router = createRouter({
          },
       },
 
-        // Auth
-        {
+      // Auth
+      {
          path: '/sign-up',
          name: 'SignUp',
          component: () => import('../views/auth/sign-up.vue'),
@@ -119,10 +116,55 @@ const router = createRouter({
          name: 'SignStore',
          component: () => import('../views/auth/sign-sotre.vue'),
          meta: {
-            requiresAuth: false,
+            requiresAuth: true,
          },
       },
 
+      {
+         path: '/produit/all',
+         name: 'ProductAll',
+         component: () => import('../views/Home/products/product.all.vue'),
+         meta: {
+            requiresAuth: true,
+         },
+      },
+
+      {
+         path: '/store/produit/simple',
+         name: 'StoreProduitSimple',
+         component: () => import('../views/stores/store.vue'),
+         meta: {
+            requiresAuth: true,
+         },
+      },
+      {
+         path: '/store/all',
+         name: 'StoreAll',
+         component: () => import('../views/stores/store.all.vue'),
+         meta: {
+            requiresAuth: true,
+         },
+      },
+
+      {
+         path: '/store/view/:id',
+         name: 'StoreView',
+         component: () => import('../views/stores/store.view.vue'),
+         meta: {
+            requiresAuth: true,
+         },
+      },
+
+
+      // Delivery
+      {
+         path: '/delivery/',
+         name: 'Delivery',
+         component: () => import('../views/delivery/index.delivery.vue'),
+         meta: {
+            requiresAuth: true,
+         },
+      },
 
       {
          // the 404 route, when none of the above matches
@@ -141,8 +183,8 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
    // if route requires authentication - requiresAuth is true
    if (to.matched.some((record) => record.meta.requiresAuth)) {
-      if (localStorage.getItem('chap-access') == null) {
-         next({ name: 'connexion' });
+      if (localStorage.getItem('access_token') == null) {
+         next({ name: 'SignIn' });
       } else {
          next();
       }
@@ -150,8 +192,8 @@ router.beforeEach((to, from, next) => {
    // if route can be accessed without authentication - guest is true
    // but we redirect back to dashboard if already logged in
    else if (to.matched.some((record) => record.meta.guest)) {
-      if (localStorage.getItem('chap-access')) {
-         next({ name: 'mes-boutiques' });
+      if (localStorage.getItem('access_token')) {
+         next({ name: '/' });
       } else {
          next();
       }

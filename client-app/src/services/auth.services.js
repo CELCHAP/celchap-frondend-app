@@ -39,9 +39,34 @@ export const Sigup = async (sign_data) => {
 };
 
 
+
+
+
 export const SignStore = async (store_data) => {
    try {
       const { data } = await axios.post(URL.Auth_CREATE_STORE, store_data);
+      if (data) {
+         return {
+            data: data,
+            error: null,
+         };
+      }
+   } catch (error) {
+
+      return {
+         data: null,
+         error: {
+            path: Object.keys(error.response.data.errors)[0],
+            message: error.response.data.errors[Object.keys(error.response.data.errors)[0]][0]
+         },
+      };
+   }
+};
+
+
+export const Signin = async (sign_data) => {
+   try {
+      const { data } = await axios.post(URL.AUTH_SIGIN, sign_data);
       if (data) {
          return {
             data: data,

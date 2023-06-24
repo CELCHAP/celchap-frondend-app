@@ -4,10 +4,12 @@ defineProps({
    img: String,
    title: String,
    price: String,
+   id: String,
+   code: String
 });
 </script>
 <template>
-   <a href="/product/test" class="flex flex-col  rounded-lg w-full gap-2">
+   <RouterLink :to="`/product/${id}/${code}`"  class="flex flex-col  rounded-lg w-full gap-2">
       <div class="inline-flex h-[150px] rounded-lg bg-slate-100">
          <img class="w-full h-full object-cover rounded-lg" v-lazy="img" alt="" />
       </div>
@@ -23,6 +25,6 @@ defineProps({
          
          
       </div>
-   </a>
+   </RouterLink>
 </template>
 <style scoped></style>

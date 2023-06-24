@@ -10,7 +10,7 @@ import FormHeader from './__partiels/form.header.vue';
 <template>
    <main class="flex ">
       <section
-         class="flex flex-col  gap-4 m-auto py-32  h-full w-full px-4"
+         class="flex flex-col  gap-4 m-auto py-8  h-full w-full px-4"
       >
          <FormHeader
             title-header="Créez un compte Celchap."

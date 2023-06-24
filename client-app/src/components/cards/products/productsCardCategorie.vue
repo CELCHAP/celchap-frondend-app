@@ -8,7 +8,7 @@ defineProps({
 <template>
    <div class="flex flex-col   gap-1 rounded-full w-full">
     
-         <img v-lazy="image" alt="" class="rounded-full h-[80px] object-cover" />
+         <img v-lazy="image" alt="" class="rounded-lg h-[80px] object-cover" />
   
 
       <div class="flex flex-col items-center">

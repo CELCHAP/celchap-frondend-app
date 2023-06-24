@@ -8,7 +8,7 @@ const router = useRouter()
 </script>
 <template>
 
-    <div class=" w-full  py-4 border-b-[1px] fixed top-0 bg-white z-20">
+    <div class=" w-full  py-4 border-b-[1px] fixed top-0 bg-white z-40">
     
         <div class="flex justify-between m-auto items-center w-11/12">
                 <!--  -->

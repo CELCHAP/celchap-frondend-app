@@ -12,8 +12,8 @@ const LogoStore = ref();
 const LoadedImage = ref();
 const inputError = reactive({
    path: '',
-   message: ''
-})
+   message: '',
+});
 
 const Localization = reactive([
    {
@@ -40,28 +40,31 @@ const changeImage = (e) => {
    };
    reader.readAsDataURL(e.target.files[0]);
 };
-const router = useRouter()
+const router = useRouter();
 
 // Button of validation
 const CreateStore = async (e) => {
    const getData = Object.fromEntries(new FormData(e.target));
-   getData.indicatif = '225'
-   getData.devise = 'Fcfa'
+   getData.indicatif = '225';
+   getData.devise = 'Fcfa';
    await SignStore(getData).then(({ data, error }) => {
       if (error) {
          inputError.path = error.path;
          inputError.message = error.message;
       }
-      if(data){
-        localStorage.setItem('Store', JSON.stringify(data.boutique))
-        router.push({name: 'MyStore'})
+      if (data) {
+         localStorage.setItem('Store', JSON.stringify(data.boutique));
+         router.push({ name: 'MyStore' });
       }
    });
 };
 </script>
 <template>
    <section class="flex flex-col gap-4 w-11/12 m-auto pt-8 pb-24">
-      <FormHeader title-header="Créez votre boutique" sub-header="En créant une boutique sur Celchap, vous bénéficiez d'une vente exclusive. Ne manquez pas cette occasion de faire des beneficies." />
+      <FormHeader
+         title-header="Créez votre boutique"
+         sub-header="En créant une boutique sur Celchap, vous bénéficiez d'une vente exclusive. Ne manquez pas cette occasion de faire des beneficies."
+      />
 
       <form class="flex flex-col gap-4" @submit.prevent="CreateStore">
          <InputForm
@@ -84,7 +87,6 @@ const CreateStore = async (e) => {
             placeholder="Donnez une description complete de votre boutique."
             :input-error="inputError"
          />
-       
 
          <InputForm
             input-el="select"
@@ -96,8 +98,6 @@ const CreateStore = async (e) => {
             placeholder="Ange Emmanuel"
             :input-error="inputError"
          />
-
-         
 
          <div class="">
             <label for="fileID" class="flex items-center gap-2 w-full">
@@ -128,12 +128,17 @@ const CreateStore = async (e) => {
                @change="changeImage"
                class="hidden"
                id="fileID"
+               name="image"
                placeholder="Ajouter une image"
             />
          </div>
 
          <div class="grid grid-cols-2 w-full bg-white fixed bottom-0 left-0">
-            <button type="button" class="text-white bg-gray-700">
+            <button
+               type="button"
+               class="text-white bg-gray-700"
+               @click="$router.go(-1)"
+            >
                Annuler
             </button>
             <button

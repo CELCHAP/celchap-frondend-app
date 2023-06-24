@@ -27,7 +27,7 @@ defineProps({
       <input v-if="inputEl === 'input'"
          :type="xtype"
          :id="name + 'ID'"
-         class="border-[1px] py-3 rounded-md px-2"
+         class="border-[1px] py-3 rounded-md px-2 inputClass"
          :placeholder="placeholder"
          :name="name"
       />
@@ -35,7 +35,7 @@ defineProps({
       <!-- Select -->
       <select v-if="inputEl === 'select'"
          :id="name + 'ID'"
-         class="border-[1px] py-3 rounded-md px-2"
+         class="border-[1px] py-3 rounded-md px-2 inputClass"
          :placeholder="placeholder"
          :name="name"
          
@@ -45,7 +45,7 @@ defineProps({
 
       <!-- Textera -->
       <textarea v-if="inputEl === 'textarea'"
-            class="border-[1px] rounded p-4"
+            class="border-[1px] rounded p-4 inputClass"
             :name="name"
             :id="name + 'ID'"
             cols="20"

@@ -9,7 +9,7 @@ defineProps({
 <template>
 
 
-<a :href="redirect" class="">
+<a :href="redirect" class="" v-if="redirect">
     <div class="flex justify-between items-center opacity-90">
        <p class="text-xl opacity- font-black"> {{ name }} </p>
 
@@ -18,6 +18,13 @@ defineProps({
        </div>
     </div>
  </a>
+ <div  class="" v-else>
+    <div class="flex justify-between items-center opacity-90">
+       <p class="text-xl opacity- font-black"> {{ name }} </p>
+
+     
+    </div>
+ </div>
 
 
 

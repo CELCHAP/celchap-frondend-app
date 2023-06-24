@@ -38,7 +38,7 @@ const SIGN_TO_CREATE_STORE = async (e) => {
       if(data){
          localStorage.setItem('access_token', data.access_token)
          localStorage.setItem('user', JSON.stringify(data.user))
-         if(data.user.roles[0].name === 'vendeur'){
+         if(data.user.roles[0].name == 'vendeur'){
             
             router.push({name: 'SignStore'})
          }else{

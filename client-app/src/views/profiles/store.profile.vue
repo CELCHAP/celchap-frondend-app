@@ -8,6 +8,8 @@ import 'swiper/css';
 import { Autoplay, Pagination } from 'swiper';
 
 import 'swiper/css/pagination';
+import { getAllStore, getStore } from '../../services/store.services';
+import CardManager from '../../components/cards/card.manager.vue';
 const modules = [Autoplay, Pagination];
 
 const AddProducts = reactive([
@@ -16,36 +18,41 @@ const AddProducts = reactive([
       icon: 'fi fi-sr-store-alt',
       color: 'bg-purple-50',
       color_strong: 'text-purple-400',
+      link: '/store/produit/simple',
    },
    {
       name: 'En Gros',
       icon: 'fi fi-sr-boxes',
       color: 'bg-blue-50',
       color_strong: 'text-blue-400',
+      link: '',
    },
    {
       name: 'FLash',
       icon: 'fi fi-sr-bolt',
       color: 'bg-orange-50',
       color_strong: 'text-orange-400',
+      link: '',
    },
    {
       name: 'Promo (%)',
       icon: 'fi fi-sr-megaphone',
       color: 'bg-cyan-50',
       color_strong: 'text-cyan-400',
+      link: '',
    },
    {
       name: 'Code Promo',
       icon: 'fi fi-sr-badge-percent',
       color: 'bg-yellow-50',
       color_strong: 'text-yellow-400',
+      link: '',
    },
 ]);
 
 const StoreManagements = reactive([
    {
-      name: 'Mes articles',
+      name: 'Mes Produits',
       icon: 'fi fi-sr-store-alt',
       color: 'bg-purple-100',
       count: '5 Articles ',
@@ -56,18 +63,18 @@ const StoreManagements = reactive([
       color: 'bg-emerald-100',
       count: '12 Commandes',
    },
-   {
-      name: 'Mes Promotions',
-      icon: 'fi fi-sr-megaphone',
-      color: 'bg-cyan-100',
-      count: '0 Promotions',
-   },
-   {
-      name: 'Mes Code Promos',
-      icon: 'fi fi-sr-badge-percent',
-      color: 'bg-yellow-100',
-      count: '3 Code promos',
-   },
+   // {
+   //    name: 'Mes Promotions',
+   //    icon: 'fi fi-sr-megaphone',
+   //    color: 'bg-cyan-100',
+   //    count: '0 Promotions',
+   // },
+   // {
+   //    name: 'Mes Code Promos',
+   //    icon: 'fi fi-sr-badge-percent',
+   //    color: 'bg-yellow-100',
+   //    count: '3 Code promos',
+   // },
 ]);
 
 const StoreAmounts = reactive([
@@ -100,28 +107,75 @@ const StoreAmounts = reactive([
       amount: '150.000',
    },
 ]);
+const isUserExists = ref(false);
+const isUserExistToken = ref(false);
+const dataStore = ref()
+const getStore__o = async (getData) => {
+   await getStore(getData).then(({ data, error }) => {
+      if (error) {
+        
+      }
+      if (data) {
+         dataStore.value = data.boutique[0]
+         StoreManagements[0].count = `${dataStore.value.produits.length} Produis`
+         StoreManagements[1].count = `${dataStore.value.commandes.length} Commandes`
+         
+
+      }
+   });
+};
+
+onMounted(() => {
+
+   
+   if(window.localStorage.getItem('Store')){
+      const storeID = JSON.parse(window.localStorage.getItem('Store'))
+      getStore__o(storeID.id)
+   }
+   
+   if (
+      window.localStorage.getItem('Store') &&
+      window.localStorage.getItem('access_token')
+   ) {
+      isUserExists.value = true;
+   }
+
+   if (window.localStorage.getItem('access_token')) {
+      isUserExistToken.value = true;
+   }
+});
 </script>
 <template>
    <!--  -->
 
-   <section class="fixed inset-0 h-14 bg-white z-40 w-full shadow-sm">
-      <div class="flex justify-between items-center w-11/12 m-auto h-full">
-         <div class="">
-            <i class="fi fi-sr-bars-sort flex"></i>
-         </div>
+   <HeaderNavigation />
 
-         <div class="">
-            <span>CELCHAP.</span>
-         </div>
-
-         <div class="">
-            <i></i>
-         </div>
+   <!--  -->
+   <section
+      v-if="!isUserExists"
+      class="h-[90vh] flex flex-col justify-center items-center"
+   >
+      <div class="flex flex-col gap-4 w-10/12 m-auto">
+         <span class="text-2xl font-bold"
+            >Vous avez besion de vendre vos produits plus rapidement...</span
+         >
+         <span class=""
+            >Creez dès maintenant une boutique sur likidons afin d'ecouler votre
+            stock de marchandise.</span
+         >
+         <a
+            :href="isUserExistToken ? '/sign-store' : '/sign-up'"
+            class="bg-orange-500 px-4 py-2 rounded-md text-white font-bold text-base"
+            >Créez..</a
+         >
       </div>
    </section>
 
    <!--  -->
-   <section class="flex flex-col w-11/12 m-auto my-20 gap-8">
+   <section
+      class="flex flex-col w-11/12 m-auto my-20 gap-8"
+      v-if="isUserExists && dataStore"
+   >
       <div class="fixed h-screen w-screen inset-0 bg-gray-50 -z-40"></div>
 
       <!--  -->
@@ -133,13 +187,13 @@ const StoreAmounts = reactive([
          >
             <div class="flex flex-col">
                <div class="flex text-xl gap-1">
-                  <span class="font-thin">Hello,</span>
-                  <span class="font-thin opacity-80"> Ange Emmanuel</span>
+                  <span class="font-thin">Hello,</span> 
+                  <span class="font-thin opacity-80">  {{ dataStore.user.fullname.length > 15 ? dataStore.user.fullname.substring(0, 15) + '...' : dataStore.user.fullname  }} </span>
                </div>
                <div class="flex items-center gap-2 text-thin text-orange-400">
                   <i class="fi fi-sr-shop flex"></i>
                   <span class="font-bold underline underline-offset-2"
-                     >Likidons</span
+                     > {{ dataStore?.name }} </span
                   >
                </div>
             </div>
@@ -184,7 +238,10 @@ const StoreAmounts = reactive([
          >
             <swiper :slides-per-view="3.5" :space-between="1" navigation>
                <swiper-slide v-for="AddProduct in AddProducts">
-                  <div class="flex flex-col gap-1 justify-center items-center">
+                  <a
+                     :href="AddProduct.link"
+                     class="flex flex-col gap-1 justify-center items-center"
+                  >
                      <div
                         class="w-16 h-16 rounded-full flex justify-center items-center"
                         :class="AddProduct.color"
@@ -197,7 +254,7 @@ const StoreAmounts = reactive([
                      <span class="font-bold text-xs">
                         {{ AddProduct.name }}
                      </span>
-                  </div>
+                  </a>
                </swiper-slide></swiper
             >
          </div>
@@ -238,33 +295,17 @@ const StoreAmounts = reactive([
          <span>Gerer votre boutique</span>
 
          <div class="flex flex-col gap-2">
-            <div
-               class="flex justify-between items-center gap-2 px-2 py-3 rounded-md"
-               :class="StoreManagement.color"
-               v-for="StoreManagement in StoreManagements"
-            >
-               <div
-                  class="w-12 h-12 rounded-full flex justify-center items-center"
-               >
-                  <i class="flex text-xl" :class="StoreManagement.icon"></i>
-               </div>
 
-               <div class="flex flex-col w-9/12">
-                  <span class="text-thin font-bold">
-                     {{ StoreManagement.name }}
-                  </span>
-                  <span class="text-xs">{{ StoreManagement.count }}</span>
-               </div>
 
-               <div
-                  class="w-8 h-8 text-xs bg-white flex rounded-full items-center justify-center"
-               >
-                  <i class="fi fi-sr-angle-right flex"></i>
-               </div>
-            </div>
+            <CardManager :managers="StoreManagements" />
+
+            
+              
+            
          </div>
       </div>
    </section>
+
    <FooterNavigation />
 </template>
 <style scoped></style>

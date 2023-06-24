@@ -17,6 +17,8 @@ import PorductsCardAll from '../../../components/cards/products/porductsCardAll.
 import { reactive, onMounted } from 'vue';
 import axios from 'axios';
 import { URL } from './../../../router/url';
+import { getAllStore } from '../../../services/store.services';
+import CardStore from '../../../components/cards/stores/card.store.vue';
 
 const modules = [Autoplay, Pagination];
 
@@ -29,7 +31,22 @@ onMounted(() => {
    getAllCategories();
    getAllProduits();
    getAllProduitsNew();
+   getAllStore__o();
 });
+
+const App_ads = reactive([
+   {
+      media: 'https://ci.jumia.is/cms/00---JA23/A-PRK/CI_W24_S_GEN_JA_LIVE_SBD_PERNOD-RICARD.jpg',
+      name: ''
+   },
+   {
+      media: 'https://ci.jumia.is/cms/00---JA23/00-S/Update/CI_W24_S_GEN_JA_LRM.gif',
+      name: ''
+   },{
+      media: 'https://ci.jumia.is/cms/00---JA23/00-TB/CI_W20_TB_GEN_GA.gif',
+      name: ''
+   }
+])
 
 // Obtenir tous les categories
 const getAllCategories = async () => {
@@ -68,6 +85,18 @@ const getAllProduitsNew = async () => {
       console.log(error);
    }
 };
+
+const DataAllSotre = ref();
+const getAllStore__o = async () => {
+   await getAllStore().then(({ data, error }) => {
+      if (error) {
+        
+      }
+      if (data) {
+         DataAllSotre.value = data.boutique;
+      }
+   });
+};
 </script>
 <template>
    <HeaderNavigation />
@@ -75,14 +104,15 @@ const getAllProduitsNew = async () => {
    <section class="pt-20 w-[90%] m-auto flex flex-col gap-6">
       <!-- Barre de recherche! -->
       <div
-         class="bg-gray-100 border-[0px] rounded-lg px-4 gap-1 flex justify-center items-center w-full"
+         class="bg-gray-100 border-[0px] rounded-lg px-4 gap-1 flex justify-between items-center w-full"
       >
-         <i class="fi fi-sr-search flex opacity-20"></i>
+         
          <input
             type="search"
             placeholder="Rechercher un produit..."
-            class="bg-white py-3 outline-none bg-transparent"
+            class="py-3 outline-none bg-transparent"
          />
+         <i class="ri-search-fill flex opacity-20"></i>
       </div>
 
       <div
@@ -94,8 +124,8 @@ const getAllProduitsNew = async () => {
          <!-- Section populaire -->
          <!-- <HeadingRedirect name="Categorie(s)" redirect="/category" /> -->
          <swiper class="w-full flex" :slides-per-view="3.8" :space-between="10">
-            <swiper-slide v-for="categorie in Categories">
-               <ProductsCardCategorie
+            <swiper-slide v-for="categorie in Categories" v-if="categorie?.media.length !=0">
+               <ProductsCardCategorie 
                   :name="categorie.name"
                   :image="categorie?.media[0]?.original_url"
                />
@@ -111,51 +141,43 @@ const getAllProduitsNew = async () => {
          :pagination="{ dynamicBullets: true }"
          :modules="modules"
       >
-         <swiper-slide v-for="categorie in Categories">
+         <swiper-slide v-for="ads in App_ads">
             <img
-               v-lazy="categorie?.media[0]?.original_url"
+               v-lazy="ads?.media"
                class="w-full h-40 object-cover rounded-md"
                alt=""
             />
          </swiper-slide>
       </swiper>
 
-
       <!-- All Store -->
       <div
          class="flex flex-col gap-4"
-         v-if="Categories && Categories.length > 0"
+         v-if="DataAllSotre && DataAllSotre.length > 0"
       >
          <!-- Section Pub -->
 
          <!-- Section populaire -->
-         <HeadingRedirect name="Nos Boutiques" redirect="/category" />
+         <HeadingRedirect name="Nos Boutiques" redirect="/store/all" />
          <swiper class="w-full flex" :slides-per-view="2.5" :space-between="10">
-            <swiper-slide v-for="categorie in Categories">
-               <div class="bg-gray-100 relative flex rounded-lg w-full border-[1px] border-purple-500">
-                  <div class="h-[130px]">
-                     <img v-lazy="categorie?.media[0]?.original_url" alt="" class="w-full h-full object-cover rounded-lg"/>
-                  </div>
-                  
-                  <div class="absolute z-20 left-0 bottom-0  w-full">
-                     <span class="py-1 px-2 text text-sm text-white bg-purple-500/80 w-full flex font-bold justify-center rounded-b-lg" >Ori Boutique</span>
-                  </div>
-
-               </div>
+            <swiper-slide v-for="store in DataAllSotre">
+             <CardStore :image="store.media[0]?.original_url" :name="store.name" :id="store.code" />
             </swiper-slide>
          </swiper>
       </div>
 
       <!-- Juste selectionner pour vous -->
-      <div class="flex flex-col gap-2 pb-24">
+      <div class="flex flex-col gap-4 pb-24">
          <!-- Section populaire -->
-         <HeadingRedirect name="Juste pour vous" />
+         <HeadingRedirect name="Juste pour vous" redirect="/produit/all" />
 
-         <div class="grid grid-cols-2 gap-3">
-            <div v-for="product in Products">
+         <div class="grid grid-cols-2 gap-3" v-if="Products">
+            <div v-for="product in Products.slice(0, 10)">
                <PorductsCardAll
+                  :id="product.id"
+                  :code="product.code"
                   :title="product.name"
-                  :price="product.montant_ajouter + 'Fcfa'"
+                  :price="product.prices[0]?.prix_afficher + 'Fcfa'"
                   :img="
                      product?.media.length === 0
                         ? ImageTonpon
